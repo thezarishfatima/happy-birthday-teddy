@@ -27,8 +27,8 @@
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(18, 28px);
-            grid-template-rows: repeat(15, 28px);
+            grid-template-columns: repeat(19, 28px);
+            grid-template-rows: repeat(16, 28px);
             gap: 2px;
             background-color: #f8bbd0;
             padding: 10px;
@@ -141,7 +141,7 @@
                 <div class="clue-item" id="clue-a3"><b>3.</b> Across (4 letters) <button class="hint-btn" onclick="toggleHint('h3')">Hint</button><div id="h3" class="hint-text">you so ___</div></div>
                 <div class="clue-item" id="clue-a5"><b>5.</b> Across (11 letters) <button class="hint-btn" onclick="toggleHint('h5')">Hint</button><div id="h5" class="hint-text">abhi wen clean shave 😋</div></div>
                 <div class="clue-item" id="clue-a6"><b>6.</b> Across (6 letters) <button class="hint-btn" onclick="toggleHint('h6')">Hint</button><div id="h6" class="hint-text">ambalam</div></div>
-                <div class="clue-item" id="clue-a8"><b>8.</b> Across (8 letters) <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">what do we say wen something's sweet or silly.. (sometem with 🥹 emoji)</div></div>
+                <div class="clue-item" id="clue-a8"><b>8.</b> Across (9 letters) <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">what do we say wen something's sweet or silly.. (sometem with 🥹 emoji)</div></div>
                 <div class="clue-item" id="clue-a9"><b>9.</b> Across (5 letters) <button class="hint-btn" onclick="toggleHint('h9')">Hint</button><div id="h9" class="hint-text">what does zarish say to question things when she's caught off guard..?</div></div>
                 <div class="clue-item" id="clue-a10"><b>10.</b> Across (10 letters) <button class="hint-btn" onclick="toggleHint('h10')">Hint</button><div id="h10" class="hint-text">what's mi abhi? (in noodles)</div></div>
             </div>
@@ -153,6 +153,7 @@
                 <div class="clue-item" id="clue-d5"><b>5.</b> Down (4 letters) <button class="hint-btn" onclick="toggleHint('h5d')">Hint</button><div id="h5d" class="hint-text">meow</div></div>
                 <div class="clue-item" id="clue-d7"><b>7.</b> Down (10 letters) <button class="hint-btn" onclick="toggleHint('h7')">Hint</button><div id="h7" class="hint-text">somg name</div></div>
                 <div class="clue-item" id="clue-d11"><b>11.</b> Down (4 letters) <button class="hint-btn" onclick="toggleHint('h11')">Hint</button><div id="h11" class="hint-text">also abhi wen clean shave 😋</div></div>
+                <div class="clue-item" id="clue-d12"><b>12.</b> Down (2 letters) <button class="hint-btn" onclick="toggleHint('h12')">Hint</button><div id="h12" class="hint-text">yh..~</div></div>
             </div>
         </div>
     </div>
@@ -172,10 +173,11 @@
             { id: 'd7', word: 'HAANKYHAAN', cells: [[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],[12,7]] }, // H4:H13
             { id: 'a5', word: 'AERODYNAMIC', cells: [[5,7],[5,8],[5,9],[5,10],[5,11],[5,12],[5,13],[5,14],[5,15],[5,16],[5,17]] }, // H6:R6
             { id: 'a6', word: 'WEEWOO', cells: [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5]] },                 // A9:F9
-            { id: 'a8', word: 'AREYYAAR', cells: [[10,2],[10,3],[10,4],[10,5],[10,6],[10,7],[10,8],[10,9]] }, // C11:J11
+            { id: 'a8', word: 'AREYYAAR', cells: [[10,1],[10,2],[10,3],[10,4],[10,5],[10,6],[10,7],[10,8],[10,9]] }, // B11:J11
+            { id: 'd12', word: 'YH', cells: [[10,6],[11,6]] },                                         // G11:G12
+            { id: 'a9', word: 'HANJI', cells: [[11,6],[11,7],[11,8],[11,9],[11,10]] },                  // G12:K12
             { id: 'd11', word: 'ANDA', cells: [[10,8],[11,8],[12,8],[13,8]] },                          // I11:I14
-            { id: 'a9', word: 'HANJI', cells: [[11,9],[11,10],[11,11],[11,12],[11,13]] },                // J12:N12
-            { id: 'a10', word: 'ENDAVAAVAY', cells: [[13,9],[13,10],[13,11],[13,12],[13,13],[13,14],[13,15],[13,16],[13,17],[13,18]] } // J14:S14
+            { id: 'a10', word: 'ENDEVAAVAY', cells: [[12,6],[12,7],[12,8],[12,9],[12,10],[12,11],[12,12],[12,13],[12,14],[12,15]] } // G13:P13
         ];
 
         const numMap = {
@@ -186,16 +188,17 @@
             '5-7': '5',
             '5-4': '5d',
             '8-0': '6',
-            '10-2': '8',
+            '10-1': '8',
+            '10-6': '12',
+            '11-6': '9',
             '10-8': '11',
-            '11-9': '9',
-            '13-9': '10'
+            '12-6': '10'
         };
 
         const grid = document.getElementById('grid');
         const map = {};
 
-        for (let r = 0; r < 15; r++) {
+        for (let r = 0; r < 16; r++) {
             for (let c = 0; c < 19; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
