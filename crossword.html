@@ -51,6 +51,10 @@
             background-color: #c8e6c9 !important;
             border-color: #4caf50 !important;
         }
+        .cell.wrong-word {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935 !important;
+        }
         .cell-num {
             position: absolute;
             top: 1px;
@@ -79,6 +83,9 @@
         .cell.correct-word input {
             color: #1b5e20;
         }
+        .cell.wrong-word input {
+            color: #b71c1c;
+        }
         .clues-container {
             flex: 1;
             min-width: 300px;
@@ -94,6 +101,7 @@
         .clues-section h3 { color: #c2185b; margin-top: 0; border-bottom: 2px solid #f8bbd0; padding-bottom: 5px; }
         .clue-item { margin-bottom: 12px; font-size: 0.88rem; line-height: 1.4; transition: all 0.3s ease; }
         .clue-item.solved { color: #2e7d32; text-decoration: line-through; opacity: 0.7; }
+        .clue-item.wrong { color: #c62828; }
         .hint-btn {
             background-color: #f8bbd0;
             border: none;
@@ -137,7 +145,7 @@
                 <div class="clue-item" id="clue-a3"><b>3.</b> Across (4 letters) <button class="hint-btn" onclick="toggleHint('h3')">Hint</button><div id="h3" class="hint-text">you so ___</div></div>
                 <div class="clue-item" id="clue-a5"><b>5.</b> Across (11 letters) <button class="hint-btn" onclick="toggleHint('h5')">Hint</button><div id="h5" class="hint-text">abhi wen clean shave 😋</div></div>
                 <div class="clue-item" id="clue-a6"><b>6.</b> Across (6 letters) <button class="hint-btn" onclick="toggleHint('h6')">Hint</button><div id="h6" class="hint-text">ambalam</div></div>
-                <div class="clue-item" id="clue-a8"><b>8.</b> Across (8 letters) <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">what do we say wen something's sweet or silly.. (sometem with 🥹 emoji)</div></div>
+                <div class="clue-item" id="clue-a8"><b>8.</b> Across (8 letters) <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">what do we say wen something's sweet or silly.. (sometem with 🥹 or 😭 emoji)</div></div>
                 <div class="clue-item" id="clue-a9"><b>9.</b> Across (5 letters) <button class="hint-btn" onclick="toggleHint('h9')">Hint</button><div id="h9" class="hint-text">what does zarish say to question things when she's caught off guard..?</div></div>
                 <div class="clue-item" id="clue-a10"><b>10.</b> Across (10 letters) <button class="hint-btn" onclick="toggleHint('h10')">Hint</button><div id="h10" class="hint-text">what's mi abhi? (in noodles)</div></div>
             </div>
@@ -149,6 +157,7 @@
                 <div class="clue-item" id="clue-d5"><b>5.</b> Down (4 letters) <button class="hint-btn" onclick="toggleHint('h5d')">Hint</button><div id="h5d" class="hint-text">meow</div></div>
                 <div class="clue-item" id="clue-d7"><b>7.</b> Down (10 letters) <button class="hint-btn" onclick="toggleHint('h7')">Hint</button><div id="h7" class="hint-text">somg name</div></div>
                 <div class="clue-item" id="clue-d11"><b>11.</b> Down (4 letters) <button class="hint-btn" onclick="toggleHint('h11')">Hint</button><div id="h11" class="hint-text">also abhi wen clean shave 😋</div></div>
+                <div class="clue-item" id="clue-d12"><b>12.</b> Down (5 letters) <button class="hint-btn" onclick="toggleHint('h12')">Hint</button><div id="h12" class="hint-text">yhaan..~</div></div>
             </div>
         </div>
     </div>
@@ -159,33 +168,36 @@
     </div>
 
     <script>
+        // Exact 1:1 cell coordinates based on Excel screenshot (0-indexed: Row 1 = 0, Col A = 0)
         const wordList = [
             { id: 'd2', word: 'SUGAR', cells: [[1,9],[2,9],[3,9],[4,9],[5,9]] },
             { id: 'a1', word: 'SABKUCH', cells: [[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7]] },
             { id: 'd4', word: 'SUP', cells: [[3,1],[4,1],[5,1]] },
             { id: 'a3', word: 'PEAK', cells: [[5,1],[5,2],[5,3],[5,4]] },
             { id: 'd5', word: 'KIKO', cells: [[5,4],[6,4],[7,4],[8,4]] },
-            { id: 'd7', word: 'HAANKYHAAN', cells: [[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],[12,7]] },
+            { id: 'd7', word: 'HAANKYHAAN', cells: [[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],[12,7]] },
             { id: 'a5', word: 'AERODYNAMIC', cells: [[5,7],[5,8],[5,9],[5,10],[5,11],[5,12],[5,13],[5,14],[5,15],[5,16],[5,17]] },
             { id: 'a6', word: 'WEEWOO', cells: [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5]] },
             { id: 'a8', word: 'AREYYAAR', cells: [[10,2],[10,3],[10,4],[10,5],[10,6],[10,7],[10,8],[10,9]] },
-            { id: 'a9', word: 'HANJI', cells: [[11,6],[11,7],[11,8],[11,9],[11,10]] },
-            { id: 'a10', word: 'ENDEVAAVAY', cells: [[12,5],[12,6],[12,7],[12,8],[12,9],[12,10],[12,11],[12,12],[12,13],[12,14]] },
-            { id: 'd11', word: 'ANDA', cells: [[11,8],[12,8],[13,8],[14,8]] }
+            { id: 'd12', word: 'YHAAN', cells: [[10,6],[11,6],[12,6],[13,6],[14,6]] },
+            { id: 'a9', word: 'HANJI', cells: [[11,7],[11,8],[11,9],[11,10],[11,11]] },
+            { id: 'd11', word: 'ANDA', cells: [[11,8],[12,8],[13,8],[14,8]] },
+            { id: 'a10', word: 'ENDEVAAVAY', cells: [[12,8],[12,9],[12,10],[12,11],[13,11],[13,12],[13,13],[13,14],[13,15],[13,16]] }
         ];
 
         const numMap = {
             '3-1': '1',
             '1-9': '2',
             '5-1': '3',
-            '4-7': '7',
+            '3-7': '7',
             '5-7': '5',
             '5-4': '5d',
             '8-0': '6',
             '10-2': '8',
-            '11-6': '9',
-            '12-5': '10',
-            '11-8': '11'
+            '10-6': '12',
+            '11-7': '9',
+            '11-8': '11',
+            '12-8': '10'
         };
 
         const grid = document.getElementById('grid');
@@ -221,10 +233,20 @@
                         input.dataset.c = c;
                         
                         input.addEventListener('input', (e) => {
+                            e.target.value = e.target.value.toUpperCase();
+                            clearValidation(r, c);
                             if (e.target.value) {
                                 focusNext(r, c);
                             }
-                            checkRealtimeWords();
+                        });
+
+                        input.addEventListener('keydown', (e) => {
+                            if (e.key === 'Backspace' && !e.target.value) {
+                                focusPrev(r, c);
+                            } else if (e.key === 'ArrowRight') focusDir(r, c + 1);
+                            else if (e.key === 'ArrowLeft') focusDir(r, c - 1);
+                            else if (e.key === 'ArrowDown') focusDir(r + 1, c);
+                            else if (e.key === 'ArrowUp') focusDir(r - 1, c);
                         });
 
                         cell.appendChild(input);
@@ -234,6 +256,14 @@
             });
         });
 
+        function clearValidation(r, c) {
+            const cell = document.getElementById(`cell-${r}-${c}`);
+            if (cell) {
+                cell.classList.remove('wrong-word');
+                cell.classList.remove('correct-word');
+            }
+        }
+
         function focusNext(r, c) {
             const nextRight = document.querySelector(`input[data-r="${r}"][data-c="${c+1}"]`);
             const nextDown = document.querySelector(`input[data-r="${r+1}"][data-c="${c}"]`);
@@ -241,23 +271,16 @@
             else if (nextDown) nextDown.focus();
         }
 
-        function checkRealtimeWords() {
-            wordList.forEach(w => {
-                let currentWord = '';
-                w.cells.forEach(([r, c]) => {
-                    const input = map[`${r}-${c}`];
-                    currentWord += input ? (input.value.toUpperCase() || ' ') : ' ';
-                });
+        function focusPrev(r, c) {
+            const prevLeft = document.querySelector(`input[data-r="${r}"][data-c="${c-1}"]`);
+            const prevUp = document.querySelector(`input[data-r="${r-1}"][data-c="${c}"]`);
+            if (prevLeft) prevLeft.focus();
+            else if (prevUp) prevUp.focus();
+        }
 
-                const clueEl = document.getElementById(`clue-${w.id}`);
-                if (currentWord === w.word) {
-                    w.cells.forEach(([r, c]) => {
-                        const cell = document.getElementById(`cell-${r}-${c}`);
-                        if (cell) cell.classList.add('correct-word');
-                    });
-                    if (clueEl) clueEl.classList.add('solved');
-                }
-            });
+        function focusDir(r, c) {
+            const target = document.querySelector(`input[data-r="${r}"][data-c="${c}"]`);
+            if (target) target.focus();
         }
 
         function toggleHint(id) {
@@ -266,16 +289,48 @@
         }
 
         function checkAnswers() {
-            checkRealtimeWords();
             let allCorrect = true;
+
+            // Reset cell colors first
+            document.querySelectorAll('.cell.active').forEach(cell => {
+                cell.classList.remove('correct-word');
+                cell.classList.remove('wrong-word');
+            });
 
             wordList.forEach(w => {
                 let currentWord = '';
+                let isFilled = true;
+
                 w.cells.forEach(([r, c]) => {
                     const input = map[`${r}-${c}`];
-                    currentWord += input ? input.value.toUpperCase() : '';
+                    const val = input ? input.value.trim().toUpperCase() : '';
+                    if (!val) isFilled = false;
+                    currentWord += val;
                 });
-                if (currentWord !== w.word) allCorrect = false;
+
+                const clueEl = document.getElementById(`clue-${w.id}`);
+
+                if (currentWord === w.word) {
+                    w.cells.forEach(([r, c]) => {
+                        const cell = document.getElementById(`cell-${r}-${c}`);
+                        if (cell) cell.classList.add('correct-word');
+                    });
+                    if (clueEl) {
+                        clueEl.classList.add('solved');
+                        clueEl.classList.remove('wrong');
+                    }
+                } else {
+                    allCorrect = false;
+                    if (isFilled) {
+                        w.cells.forEach(([r, c]) => {
+                            const cell = document.getElementById(`cell-${r}-${c}`);
+                            if (cell && !cell.classList.contains('correct-word')) {
+                                cell.classList.add('wrong-word');
+                            }
+                        });
+                        if (clueEl) clueEl.classList.add('wrong');
+                    }
+                }
             });
 
             const status = document.getElementById('status-msg');
@@ -287,7 +342,7 @@
                 }, 1500);
             } else {
                 status.style.color = '#c62828';
-                status.innerText = 'Some answers are incomplete or incorrect!';
+                status.innerText = 'Some words are incorrect or missing!';
             }
         }
     </script>
