@@ -22,13 +22,13 @@
             flex-wrap: wrap;
             gap: 25px;
             justify-content: center;
-            max-width: 1050px;
+            max-width: 1200px;
             width: 100%;
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(16, 30px);
-            grid-template-rows: repeat(15, 30px);
+            grid-template-columns: repeat(22, 28px);
+            grid-template-rows: repeat(15, 28px);
             gap: 2px;
             background-color: #f8bbd0;
             padding: 10px;
@@ -36,8 +36,8 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .cell {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             background-color: #f8bbd0;
             position: relative;
         }
@@ -55,7 +55,7 @@
             position: absolute;
             top: 1px;
             left: 2px;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             font-weight: bold;
             color: #c2185b;
             pointer-events: none;
@@ -66,7 +66,7 @@
             height: 100%;
             border: none;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             text-transform: uppercase;
             background: transparent;
@@ -92,8 +92,8 @@
         }
         .clues-section { margin-bottom: 15px; }
         .clues-section h3 { color: #c2185b; margin-top: 0; border-bottom: 2px solid #f8bbd0; padding-bottom: 5px; }
-        .clue-item { margin-bottom: 12px; font-size: 0.88rem; line-height: 1.4; }
-        .clue-item.solved { color: #2e7d32; text-decoration: line-through; }
+        .clue-item { margin-bottom: 12px; font-size: 0.88rem; line-height: 1.4; transition: all 0.3s ease; }
+        .clue-item.solved { color: #2e7d32; text-decoration: line-through; opacity: 0.7; }
         .hint-btn {
             background-color: #f8bbd0;
             border: none;
@@ -160,31 +160,31 @@
 
     <script>
         const wordList = [
-            { id: 'a1', word: 'SABKUCH', cells: [[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7]] },
-            { id: 'd2', word: 'SUGAR', cells: [[0,6],[1,6],[2,6],[3,6],[4,6]] },
-            { id: 'a3', word: 'PEAK', cells: [[4,2],[4,3],[4,4],[4,5]] },
-            { id: 'd4', word: 'SUP', cells: [[2,2],[3,2],[4,2]] },
-            { id: 'a5', word: 'AERODYNAMIC', cells: [[4,6],[4,7],[4,8],[4,9],[4,10],[4,11],[4,12],[4,13],[4,14],[4,15],[4,16]] },
-            { id: 'd5', word: 'KIKO', cells: [[4,5],[5,5],[6,5],[6,6]] },
+            { id: 'a1', word: 'SABKUCH', cells: [[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],[2,10]] },
+            { id: 'd2', word: 'SUGAR', cells: [[0,11],[1,11],[2,11],[3,11],[4,11]] },
+            { id: 'a3', word: 'PEAK', cells: [[4,4],[4,5],[4,6],[4,7]] },
+            { id: 'd4', word: 'SUP', cells: [[2,4],[3,4],[4,4]] },
+            { id: 'a5', word: 'AERODYNAMIC', cells: [[4,11],[4,12],[4,13],[4,14],[4,15],[4,16],[4,17],[4,18],[4,19],[4,20],[4,21]] },
+            { id: 'd5', word: 'KIKO', cells: [[4,7],[5,7],[6,7],[7,7]] },
             { id: 'a6', word: 'WEEWOO', cells: [[7,0],[7,1],[7,2],[7,3],[7,4],[7,5]] },
-            { id: 'd7', word: 'HAANKYHAAN', cells: [[3,6],[4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6]] },
-            { id: 'a8', word: 'AREYYAAR', cells: [[9,3],[9,4],[9,5],[9,6],[9,7],[9,8],[9,9],[9,10]] },
-            { id: 'a9', word: 'HANJI', cells: [[10,5],[10,6],[10,7],[10,8],[10,9]] },
-            { id: 'a10', word: 'ENDEVAAVAY', cells: [[11,5],[11,6],[11,7],[11,8],[11,9],[11,10],[11,11],[11,12],[11,13],[11,14]] },
-            { id: 'd11', word: 'ANDA', cells: [[11,6],[12,6],[13,6],[14,6]] }
+            { id: 'd7', word: 'HAANKYHAAN', cells: [[3,9],[4,9],[5,9],[6,9],[7,9],[8,9],[9,9],[10,9],[11,9],[12,9]] },
+            { id: 'a8', word: 'AREYYAAR', cells: [[9,5],[9,6],[9,7],[9,8],[9,9],[9,10],[9,11],[9,12]] },
+            { id: 'a9', word: 'HANJI', cells: [[10,9],[10,10],[10,11],[10,12],[10,13]] },
+            { id: 'a10', word: 'ENDEVAAVAY', cells: [[11,9],[11,10],[11,11],[11,12],[11,13],[11,14],[11,15],[11,16],[11,17],[11,18]] },
+            { id: 'd11', word: 'ANDA', cells: [[11,11],[12,11],[13,11],[14,11]] }
         ];
 
         const numMap = {
-            '2-1': '1', '0-6': '2', '4-3': '3', '2-2': '4',
-            '4-6': '5', '4-5': '5', '7-0': '6', '3-6': '7',
-            '9-3': '8', '10-5': '9', '11-5': '10', '11-6': '11'
+            '2-4': '1', '0-11': '2', '4-4': '3', '2-4': '1/4',
+            '4-11': '5', '4-7': '5', '7-0': '6', '3-9': '7',
+            '9-5': '8', '10-9': '9', '11-9': '10', '11-11': '11'
         };
 
         const grid = document.getElementById('grid');
         const map = {};
 
         for (let r = 0; r < 15; r++) {
-            for (let c = 0; c < 16; c++) {
+            for (let c = 0; c < 22; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.id = `cell-${r}-${c}`;
@@ -193,7 +193,7 @@
         }
 
         wordList.forEach(w => {
-            w.cells.forEach(([r, c], idx) => {
+            w.cells.forEach(([r, c]) => {
                 const key = `${r}-${c}`;
                 let cell = document.getElementById(`cell-${r}-${c}`);
                 if (cell) {
