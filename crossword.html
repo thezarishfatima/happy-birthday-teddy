@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Level 1: Crossword</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; background: #f7d794; padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 40px); gap: 5px; justify-content: center; margin: 20px 0; }
+        input { width: 40px; height: 40px; text-align: center; font-size: 20px; text-transform: uppercase; border: 2px solid #54a0ff; border-radius: 8px; }
+        .hidden-btn { display: none; background: #10ac84; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Level 1: Secret Word</h1>
+    <p>Clue: What is our ultimate favorite treat? (4 Letters)</p>
+
+    <div class="grid">
+        <input type="text" maxlength="1" id="c1">
+        <input type="text" maxlength="1" id="c2">
+        <input type="text" maxlength="1" id="c3">
+        <input type="text" maxlength="1" id="c4">
+    </div>
+
+    <button onclick="checkCrossword()">Check Answer</button>
+    <p id="msg"></p>
+    <br>
+    <button id="nextBtn" class="hidden-btn" onclick="window.location.href='maze.html'">Go to Maze Level 🧸 ➔</button>
+
+    <script>
+        function checkCrossword() {
+            // Replace 'CAKE' with your 4-letter secret word
+            let word = (document.getElementById('c1').value + document.getElementById('c2').value + document.getElementById('c3').value + document.getElementById('c4').value).toUpperCase();
+            if(word === "CAKE") {
+                document.getElementById('msg').innerText = "Correct! Level Unlocked! 🎉";
+                document.getElementById('nextBtn').style.display = "inline-block";
+            } else {
+                document.getElementById('msg').innerText = "Try again! Hint: Sweet dessert 🍰";
+            }
+        }
+    </script>
+</body>
+</html>
