@@ -22,22 +22,22 @@
             flex-wrap: wrap;
             gap: 25px;
             justify-content: center;
-            max-width: 1000px;
+            max-width: 1050px;
             width: 100%;
         }
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(12, 34px);
-            grid-template-rows: repeat(14, 34px);
+            grid-template-columns: repeat(16, 30px);
+            grid-template-rows: repeat(15, 30px);
             gap: 2px;
             background-color: #f8bbd0;
-            padding: 8px;
+            padding: 10px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .cell {
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             background-color: #f8bbd0;
             position: relative;
         }
@@ -46,23 +46,35 @@
             border: 1px solid #f48fb1;
             border-radius: 4px;
         }
+        .cell-num {
+            position: absolute;
+            top: 1px;
+            left: 2px;
+            font-size: 0.55rem;
+            font-weight: bold;
+            color: #c2185b;
+            pointer-events: none;
+            z-index: 2;
+        }
         .cell input {
             width: 100%;
             height: 100%;
             border: none;
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             text-transform: uppercase;
             background: transparent;
             color: #880e4f;
             outline: none;
             padding: 0;
+            position: relative;
+            z-index: 1;
         }
         .clues-container {
             flex: 1;
-            min-width: 280px;
-            max-width: 420px;
+            min-width: 300px;
+            max-width: 450px;
             background: white;
             padding: 20px;
             border-radius: 12px;
@@ -72,7 +84,7 @@
         }
         .clues-section { margin-bottom: 15px; }
         .clues-section h3 { color: #c2185b; margin-top: 0; border-bottom: 2px solid #f8bbd0; padding-bottom: 5px; }
-        .clue-item { margin-bottom: 12px; font-size: 0.88rem; line-height: 1.3; }
+        .clue-item { margin-bottom: 12px; font-size: 0.88rem; line-height: 1.4; }
         .hint-btn {
             background-color: #f8bbd0;
             border: none;
@@ -84,7 +96,7 @@
             margin-left: 5px;
         }
         .hint-btn:hover { background-color: #f48fb1; }
-        .hint-text { display: none; color: #ad1457; font-style: italic; font-size: 0.8rem; margin-top: 3px; }
+        .hint-text { display: none; color: #ad1457; font-style: italic; font-size: 0.82rem; margin-top: 4px; background: #fff0f5; padding: 4px 8px; border-radius: 4px; border-left: 3px solid #e91e63; }
         .controls { margin-top: 20px; text-align: center; }
         .btn-main {
             background-color: #e91e63;
@@ -112,22 +124,22 @@
         <div class="clues-container">
             <div class="clues-section">
                 <h3>Across</h3>
-                <div class="clue-item"><b>1.</b> Across (7) - Main connection <button class="hint-btn" onclick="toggleHint('h1')">Hint</button><div id="h1" class="hint-text">Apto mera _ ho..~</div></div>
-                <div class="clue-item"><b>2.</b> Across (4) - Catchphrase <button class="hint-btn" onclick="toggleHint('h2')">Hint</button><div id="h2" class="hint-text">You so ___</div></div>
-                <div class="clue-item"><b>3.</b> Across (11) - Smooth look <button class="hint-btn" onclick="toggleHint('h3')">Hint</button><div id="h3" class="hint-text">Abhi wen clean shave 😋</div></div>
-                <div class="clue-item"><b>4.</b> Across (6) - Alarm! <button class="hint-btn" onclick="toggleHint('h4')">Hint</button><div id="h4" class="hint-text">Ambalam</div></div>
-                <div class="clue-item"><b>5.</b> Across (8) - Sweet/silly expression <button class="hint-btn" onclick="toggleHint('h5')">Hint</button><div id="h5" class="hint-text">What do we say wen something's sweet or silly.. (sometem with 🥹 emoji)</div></div>
-                <div class="clue-item"><b>6.</b> Across (5) - Caught off guard response <button class="hint-btn" onclick="toggleHint('h6')">Hint</button><div id="h6" class="hint-text">What does zarish say to question things when she's caught off guard..?</div></div>
-                <div class="clue-item"><b>7.</b> Across (10) - Noodle status <button class="hint-btn" onclick="toggleHint('h7')">Hint</button><div id="h7" class="hint-text">What's mi abhi? (in noodles)</div></div>
+                <div class="clue-item"><b>1.</b> Across (7 letters) <button class="hint-btn" onclick="toggleHint('h1')">Hint</button><div id="h1" class="hint-text">apto mera _ ho..~</div></div>
+                <div class="clue-item"><b>3.</b> Across (4 letters) <button class="hint-btn" onclick="toggleHint('h3')">Hint</button><div id="h3" class="hint-text">you so ___</div></div>
+                <div class="clue-item"><b>5.</b> Across (11 letters) <button class="hint-btn" onclick="toggleHint('h5')">Hint</button><div id="h5" class="hint-text">abhi wen clean shave 😋</div></div>
+                <div class="clue-item"><b>6.</b> Across (6 letters) <button class="hint-btn" onclick="toggleHint('h6')">Hint</button><div id="h6" class="hint-text">ambalam</div></div>
+                <div class="clue-item"><b>8.</b> Across (8 letters) <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">what do we say wen something's sweet or silly.. (sometem with 🥹 emoji)</div></div>
+                <div class="clue-item"><b>9.</b> Across (5 letters) <button class="hint-btn" onclick="toggleHint('h9')">Hint</button><div id="h9" class="hint-text">what does zarish say to question things when she's caught off guard..?</div></div>
+                <div class="clue-item"><b>10.</b> Across (10 letters) <button class="hint-btn" onclick="toggleHint('h10')">Hint</button><div id="h10" class="hint-text">what's mi abhi? (in noodles)</div></div>
             </div>
 
             <div class="clues-section">
                 <h3>Down</h3>
-                <div class="clue-item"><b>8.</b> Down (5) - End call term <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">Sometem zarish end call wid "bye ____"</div></div>
-                <div class="clue-item"><b>9.</b> Down (10) - Favorite Track <button class="hint-btn" onclick="toggleHint('h9')">Hint</button><div id="h9" class="hint-text">Somg name</div></div>
-                <div class="clue-item"><b>10.</b> Down (3) - Greeting <button class="hint-btn" onclick="toggleHint('h10')">Hint</button><div id="h10" class="hint-text">Call start hoty e kya bolna hota hai..?</div></div>
-                <div class="clue-item"><b>11.</b> Down (4) - Cute pet <button class="hint-btn" onclick="toggleHint('h11')">Hint</button><div id="h11" class="hint-text">Meow</div></div>
-                <div class="clue-item"><b>12.</b> Down (4) - Clean shave shape <button class="hint-btn" onclick="toggleHint('h12')">Hint</button><div id="h12" class="hint-text">Also abhi wen clean shave 😋</div></div>
+                <div class="clue-item"><b>2.</b> Down (5 letters) <button class="hint-btn" onclick="toggleHint('h2')">Hint</button><div id="h2" class="hint-text">sometem zarish end call wid "bye ____"</div></div>
+                <div class="clue-item"><b>4.</b> Down (3 letters) <button class="hint-btn" onclick="toggleHint('h4')">Hint</button><div id="h4" class="hint-text">call start hoty e kya bolna hota hai..?</div></div>
+                <div class="clue-item"><b>5.</b> Down (4 letters) <button class="hint-btn" onclick="toggleHint('h5d')">Hint</button><div id="h5d" class="hint-text">meow</div></div>
+                <div class="clue-item"><b>7.</b> Down (10 letters) <button class="hint-btn" onclick="toggleHint('h7')">Hint</button><div id="h7" class="hint-text">somg name</div></div>
+                <div class="clue-item"><b>11.</b> Down (4 letters) <button class="hint-btn" onclick="toggleHint('h11')">Hint</button><div id="h11" class="hint-text">also abhi wen clean shave 😋</div></div>
             </div>
         </div>
     </div>
@@ -139,25 +151,40 @@
 
     <script>
         const layout = [
-            { r: 0, c: 6, char: 'S' }, { r: 1, c: 6, char: 'U' }, { r: 2, c: 6, char: 'G' }, { r: 3, c: 6, char: 'A' },
-            { r: 2, c: 1, char: 'S' }, { r: 2, c: 2, char: 'A' }, { r: 2, c: 3, char: 'B' }, { r: 2, c: 4, char: 'K' }, { r: 2, c: 5, char: 'U' }, { r: 2, c: 7, char: 'H' },
-            { r: 3, c: 2, char: 'U' }, { r: 4, c: 2, char: 'P' },
-            { r: 4, c: 3, char: 'E' }, { r: 4, c: 4, char: 'A' }, { r: 4, c: 5, char: 'K' },
-            { r: 5, c: 4, char: 'I' }, { r: 6, c: 4, char: 'K' }, { r: 6, c: 5, char: 'O' },
-            { r: 7, c: 0, char: 'W' }, { r: 7, c: 1, char: 'E' }, { r: 7, c: 2, char: 'E' }, { r: 7, c: 3, char: 'W' }, { r: 7, c: 4, char: 'O' },
-            { r: 3, c: 5, char: 'A' }, { r: 4, c: 5, char: 'A' }, { r: 5, c: 5, char: 'N' }, { r: 6, c: 5, char: 'K' }, { r: 7, c: 5, char: 'Y' }, { r: 8, c: 5, char: 'H' }, { r: 9, c: 5, char: 'A' }, { r: 10, c: 5, char: 'A' }, { r: 11, c: 5, char: 'N' },
-            { r: 4, c: 6, char: 'E' }, { r: 4, c: 7, char: 'R' }, { r: 4, c: 8, char: 'O' }, { r: 4, c: 9, char: 'D' }, { r: 4, c: 10, char: 'Y' }, { r: 4, c: 11, char: 'N' }, { r: 4, c: 12, char: 'A' }, { r: 4, c: 13, char: 'M' }, { r: 4, c: 14, char: 'I' }, { r: 4, c: 15, char: 'C' },
-            { r: 9, c: 2, char: 'A' }, { r: 9, c: 3, char: 'R' }, { r: 9, c: 4, char: 'E' }, { r: 9, c: 6, char: 'Y' }, { r: 9, c: 7, char: 'Y' }, { r: 9, c: 8, char: 'A' }, { r: 9, c: 9, char: 'A' }, { r: 9, c: 10, char: 'R' },
-            { r: 10, c: 4, char: 'H' }, { r: 10, c: 6, char: 'N' }, { r: 10, c: 7, char: 'J' }, { r: 10, c: 8, char: 'I' },
-            { r: 11, c: 4, char: 'E' }, { r: 11, c: 6, char: 'D' }, { r: 11, c: 7, char: 'E' }, { r: 11, c: 8, char: 'V' }, { r: 11, c: 9, char: 'A' }, { r: 11, c: 10, char: 'A' }, { r: 11, c: 11, char: 'V' }, { r: 11, c: 12, char: 'A' }, { r: 11, c: 13, char: 'Y' },
-            { r: 12, c: 5, char: 'A' }, { r: 13, c: 5, char: 'N' }, { r: 14, c: 5, char: 'D' }
+            { r: 0, c: 6, char: 'S', num: '2' }, { r: 1, c: 6, char: 'U' }, { r: 2, c: 6, char: 'G' }, { r: 3, c: 6, char: 'A' },
+            { r: 2, c: 1, char: 'S', num: '1' }, { r: 2, c: 2, char: 'A' }, { r: 2, c: 3, char: 'B' }, { r: 2, c: 4, char: 'K' }, { r: 2, c: 5, char: 'U' }, { r: 2, c: 7, char: 'H' },
+            { r: 2, c: 2, char: 'A' }, { r: 3, c: 2, char: 'U', num: '4' }, { r: 4, c: 2, char: 'P' },
+            { r: 4, c: 2, char: 'P' }, { r: 4, c: 3, char: 'E', num: '3' }, { r: 4, c: 4, char: 'A' }, { r: 4, c: 5, char: 'K' },
+            { r: 4, c: 5, char: 'K' }, { r: 5, c: 5, char: 'I', num: '5d' }, { r: 6, c: 5, char: 'K' }, { r: 6, c: 6, char: 'O' },
+            { r: 7, c: 0, char: 'W', num: '6' }, { r: 7, c: 1, char: 'E' }, { r: 7, c: 2, char: 'E' }, { r: 7, c: 3, char: 'W' }, { r: 7, c: 4, char: 'O' }, { r: 7, c: 5, char: 'O' },
+            { r: 3, c: 6, char: 'A' }, { r: 4, c: 6, char: 'A', num: '5' }, { r: 5, c: 6, char: 'N' }, { r: 6, c: 6, char: 'K' }, { r: 7, c: 6, char: 'Y' }, { r: 8, c: 6, char: 'H', num: '7' }, { r: 9, c: 6, char: 'A' }, { r: 10, c: 6, char: 'A' }, { r: 11, c: 6, char: 'N' },
+            { r: 4, c: 6, char: 'A' }, { r: 4, c: 7, char: 'E' }, { r: 4, c: 8, char: 'R' }, { r: 4, c: 9, char: 'O' }, { r: 4, c: 10, char: 'D' }, { r: 4, c: 11, char: 'Y' }, { r: 4, c: 12, char: 'N' }, { r: 4, c: 13, char: 'A' }, { r: 4, c: 14, char: 'M' }, { r: 4, c: 15, char: 'I' }, { r: 4, c: 16, char: 'C' },
+            { r: 9, c: 3, char: 'A', num: '8' }, { r: 9, c: 4, char: 'R' }, { r: 9, c: 5, char: 'E' }, { r: 9, c: 7, char: 'Y' }, { r: 9, c: 8, char: 'Y' }, { r: 9, c: 9, char: 'A' }, { r: 9, c: 10, char: 'A' }, { r: 9, c: 11, char: 'R' },
+            { r: 10, c: 5, char: 'H', num: '9' }, { r: 10, c: 7, char: 'N' }, { r: 10, c: 8, char: 'J' }, { r: 10, c: 9, char: 'I' },
+            { r: 11, c: 5, char: 'E', num: '10' }, { r: 11, c: 7, char: 'D' }, { r: 11, c: 8, char: 'E' }, { r: 11, c: 9, char: 'V' }, { r: 11, c: 10, char: 'A' }, { r: 11, c: 11, char: 'A' }, { r: 11, c: 12, char: 'V' }, { r: 11, c: 13, char: 'A' }, { r: 11, c: 14, char: 'Y' },
+            { r: 12, c: 6, char: 'A', num: '11' }, { r: 13, c: 6, char: 'N' }, { r: 14, c: 6, char: 'D' }, { r: 14, c: 7, char: 'A' }
         ];
+
+        const numMap = {
+            '2-1': '1',
+            '0-6': '2',
+            '4-3': '3',
+            '2-2': '4',
+            '4-6': '5',
+            '5-5': '5',
+            '7-0': '6',
+            '3-6': '7',
+            '9-3': '8',
+            '10-5': '9',
+            '11-5': '10',
+            '12-6': '11'
+        };
 
         const grid = document.getElementById('grid');
         const map = {};
 
-        for (let r = 0; r < 14; r++) {
-            for (let c = 0; c < 12; c++) {
+        for (let r = 0; r < 15; r++) {
+            for (let c = 0; c < 16; c++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.id = `cell-${r}-${c}`;
@@ -165,42 +192,33 @@
             }
         }
 
-        const validCells = [
-            [0,6,'SUGAR',0],[1,6],[2,6],[3,6],[4,6,'R'],
-            [2,1,'SABKUCH'],[2,2],[2,3],[2,4],[2,5],[2,7],
-            [3,2,'SUP',1],[4,2],
-            [4,3,'PEAK'],[4,4],[4,5],
-            [5,4,'KIKO',1],[6,4],[6,5,'O'],
-            [7,0,'WEEWOO'],[7,1],[7,2],[7,3],[7,4],
-            [3,5,'HAANKYHAAN',1],[5,5],[8,5],[10,5],
-            [4,6,'AERODYNAMIC'],[4,7],[4,8],[4,9],[4,10],[4,11],
-            [9,2,'AREYYAAR'],[9,3],[9,4],[9,5],[9,6],[9,7],[9,8],[9,9],
-            [10,4,'HANJI'],[10,6],[10,7],
-            [11,4,'ENDEVAAVAY'],[11,6],[11,7],[11,8],[11,9],[11,10],[11,11],
-            [12,5,'ANDA',1],[13,5]
-        ];
-
         layout.forEach(item => {
             const key = `${item.r}-${item.c}`;
-            if (!map[key]) {
-                const cell = document.getElementById(`cell-${item.r}-${item.c}`);
-                if (cell) {
-                    cell.classList.add('active');
-                    const input = document.createElement('input');
-                    input.maxLength = 1;
-                    input.dataset.answer = item.char;
-                    input.dataset.r = item.r;
-                    input.dataset.c = item.c;
-                    
-                    input.addEventListener('input', (e) => {
-                        if (e.target.value) {
-                            focusNext(parseInt(e.target.dataset.r), parseInt(e.target.dataset.c));
-                        }
-                    });
-
-                    cell.appendChild(input);
-                    map[key] = input;
+            let cell = document.getElementById(`cell-${item.r}-${item.c}`);
+            if (cell && !map[key]) {
+                cell.classList.add('active');
+                
+                if (numMap[key]) {
+                    const numDiv = document.createElement('div');
+                    numDiv.className = 'cell-num';
+                    numDiv.innerText = numMap[key];
+                    cell.appendChild(numDiv);
                 }
+
+                const input = document.createElement('input');
+                input.maxLength = 1;
+                input.dataset.answer = item.char;
+                input.dataset.r = item.r;
+                input.dataset.c = item.c;
+                
+                input.addEventListener('input', (e) => {
+                    if (e.target.value) {
+                        focusNext(parseInt(e.target.dataset.r), parseInt(e.target.dataset.c));
+                    }
+                });
+
+                cell.appendChild(input);
+                map[key] = input;
             }
         });
 
