@@ -2,39 +2,247 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Level 1: Crossword</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1: Our Crossword</title>
     <style>
-        body { text-align: center; font-family: sans-serif; background: #f7d794; padding: 40px; }
-        .grid { display: grid; grid-template-columns: repeat(3, 40px); gap: 5px; justify-content: center; margin: 20px 0; }
-        input { width: 40px; height: 40px; text-align: center; font-size: 20px; text-transform: uppercase; border: 2px solid #54a0ff; border-radius: 8px; }
-        .hidden-btn { display: none; background: #10ac84; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 20px; cursor: pointer; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fce4ec;
+            color: #4a4a4a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 { color: #d81b60; margin-bottom: 5px; }
+        .subtitle { font-size: 0.95rem; color: #78909c; margin-bottom: 20px; }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(12, 34px);
+            grid-template-rows: repeat(14, 34px);
+            gap: 2px;
+            background-color: #f8bbd0;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .cell {
+            width: 34px;
+            height: 34px;
+            background-color: #f8bbd0;
+            position: relative;
+        }
+        .cell.active {
+            background-color: #ffffff;
+            border: 1px solid #f48fb1;
+            border-radius: 4px;
+        }
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: transparent;
+            color: #880e4f;
+            outline: none;
+            padding: 0;
+        }
+        .clues-container {
+            flex: 1;
+            min-width: 280px;
+            max-width: 420px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            max-height: 520px;
+            overflow-y: auto;
+        }
+        .clues-section { margin-bottom: 15px; }
+        .clues-section h3 { color: #c2185b; margin-top: 0; border-bottom: 2px solid #f8bbd0; padding-bottom: 5px; }
+        .clue-item { margin-bottom: 12px; font-size: 0.88rem; line-height: 1.3; }
+        .hint-btn {
+            background-color: #f8bbd0;
+            border: none;
+            color: #880e4f;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .hint-btn:hover { background-color: #f48fb1; }
+        .hint-text { display: none; color: #ad1457; font-style: italic; font-size: 0.8rem; margin-top: 3px; }
+        .controls { margin-top: 20px; text-align: center; }
+        .btn-main {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
+        }
+        .btn-main:hover { background-color: #c2185b; }
+        #status-msg { margin-top: 10px; font-weight: bold; min-height: 24px; }
     </style>
 </head>
 <body>
-    <h1>Level 1: Secret Word</h1>
-    <p>Clue: What is our ultimate favorite treat? (4 Letters)</p>
 
-    <div class="grid">
-        <input type="text" maxlength="1" id="c1">
-        <input type="text" maxlength="1" id="c2">
-        <input type="text" maxlength="1" id="c3">
-        <input type="text" maxlength="1" id="c4">
+    <h1>Level 1: Our Crossword 🧩</h1>
+    <div class="subtitle">Fill in all our inside jokes to unlock the next level!</div>
+
+    <div class="container">
+        <div class="grid-container" id="grid"></div>
+
+        <div class="clues-container">
+            <div class="clues-section">
+                <h3>Across</h3>
+                <div class="clue-item"><b>1.</b> Across (7) - Main connection <button class="hint-btn" onclick="toggleHint('h1')">Hint</button><div id="h1" class="hint-text">Apto mera _ ho..~</div></div>
+                <div class="clue-item"><b>2.</b> Across (4) - Catchphrase <button class="hint-btn" onclick="toggleHint('h2')">Hint</button><div id="h2" class="hint-text">You so ___</div></div>
+                <div class="clue-item"><b>3.</b> Across (11) - Smooth look <button class="hint-btn" onclick="toggleHint('h3')">Hint</button><div id="h3" class="hint-text">Abhi wen clean shave 😋</div></div>
+                <div class="clue-item"><b>4.</b> Across (6) - Alarm! <button class="hint-btn" onclick="toggleHint('h4')">Hint</button><div id="h4" class="hint-text">Ambalam</div></div>
+                <div class="clue-item"><b>5.</b> Across (8) - Sweet/silly expression <button class="hint-btn" onclick="toggleHint('h5')">Hint</button><div id="h5" class="hint-text">What do we say wen something's sweet or silly.. (sometem with 🥹 emoji)</div></div>
+                <div class="clue-item"><b>6.</b> Across (5) - Caught off guard response <button class="hint-btn" onclick="toggleHint('h6')">Hint</button><div id="h6" class="hint-text">What does zarish say to question things when she's caught off guard..?</div></div>
+                <div class="clue-item"><b>7.</b> Across (10) - Noodle status <button class="hint-btn" onclick="toggleHint('h7')">Hint</button><div id="h7" class="hint-text">What's mi abhi? (in noodles)</div></div>
+            </div>
+
+            <div class="clues-section">
+                <h3>Down</h3>
+                <div class="clue-item"><b>8.</b> Down (5) - End call term <button class="hint-btn" onclick="toggleHint('h8')">Hint</button><div id="h8" class="hint-text">Sometem zarish end call wid "bye ____"</div></div>
+                <div class="clue-item"><b>9.</b> Down (10) - Favorite Track <button class="hint-btn" onclick="toggleHint('h9')">Hint</button><div id="h9" class="hint-text">Somg name</div></div>
+                <div class="clue-item"><b>10.</b> Down (3) - Greeting <button class="hint-btn" onclick="toggleHint('h10')">Hint</button><div id="h10" class="hint-text">Call start hoty e kya bolna hota hai..?</div></div>
+                <div class="clue-item"><b>11.</b> Down (4) - Cute pet <button class="hint-btn" onclick="toggleHint('h11')">Hint</button><div id="h11" class="hint-text">Meow</div></div>
+                <div class="clue-item"><b>12.</b> Down (4) - Clean shave shape <button class="hint-btn" onclick="toggleHint('h12')">Hint</button><div id="h12" class="hint-text">Also abhi wen clean shave 😋</div></div>
+            </div>
+        </div>
     </div>
 
-    <button onclick="checkCrossword()">Check Answer</button>
-    <p id="msg"></p>
-    <br>
-    <button id="nextBtn" class="hidden-btn" onclick="window.location.href='maze.html'">Go to Maze Level 🧸 ➔</button>
+    <div class="controls">
+        <button class="btn-main" onclick="checkAnswers()">Check Crossword ✨</button>
+        <div id="status-msg"></div>
+    </div>
 
     <script>
-        function checkCrossword() {
-            // Replace 'CAKE' with your 4-letter secret word
-            let word = (document.getElementById('c1').value + document.getElementById('c2').value + document.getElementById('c3').value + document.getElementById('c4').value).toUpperCase();
-            if(word === "CAKE") {
-                document.getElementById('msg').innerText = "Correct! Level Unlocked! 🎉";
-                document.getElementById('nextBtn').style.display = "inline-block";
+        const layout = [
+            { r: 0, c: 6, char: 'S' }, { r: 1, c: 6, char: 'U' }, { r: 2, c: 6, char: 'G' }, { r: 3, c: 6, char: 'A' },
+            { r: 2, c: 1, char: 'S' }, { r: 2, c: 2, char: 'A' }, { r: 2, c: 3, char: 'B' }, { r: 2, c: 4, char: 'K' }, { r: 2, c: 5, char: 'U' }, { r: 2, c: 7, char: 'H' },
+            { r: 3, c: 2, char: 'U' }, { r: 4, c: 2, char: 'P' },
+            { r: 4, c: 3, char: 'E' }, { r: 4, c: 4, char: 'A' }, { r: 4, c: 5, char: 'K' },
+            { r: 5, c: 4, char: 'I' }, { r: 6, c: 4, char: 'K' }, { r: 6, c: 5, char: 'O' },
+            { r: 7, c: 0, char: 'W' }, { r: 7, c: 1, char: 'E' }, { r: 7, c: 2, char: 'E' }, { r: 7, c: 3, char: 'W' }, { r: 7, c: 4, char: 'O' },
+            { r: 3, c: 5, char: 'A' }, { r: 4, c: 5, char: 'A' }, { r: 5, c: 5, char: 'N' }, { r: 6, c: 5, char: 'K' }, { r: 7, c: 5, char: 'Y' }, { r: 8, c: 5, char: 'H' }, { r: 9, c: 5, char: 'A' }, { r: 10, c: 5, char: 'A' }, { r: 11, c: 5, char: 'N' },
+            { r: 4, c: 6, char: 'E' }, { r: 4, c: 7, char: 'R' }, { r: 4, c: 8, char: 'O' }, { r: 4, c: 9, char: 'D' }, { r: 4, c: 10, char: 'Y' }, { r: 4, c: 11, char: 'N' }, { r: 4, c: 12, char: 'A' }, { r: 4, c: 13, char: 'M' }, { r: 4, c: 14, char: 'I' }, { r: 4, c: 15, char: 'C' },
+            { r: 9, c: 2, char: 'A' }, { r: 9, c: 3, char: 'R' }, { r: 9, c: 4, char: 'E' }, { r: 9, c: 6, char: 'Y' }, { r: 9, c: 7, char: 'Y' }, { r: 9, c: 8, char: 'A' }, { r: 9, c: 9, char: 'A' }, { r: 9, c: 10, char: 'R' },
+            { r: 10, c: 4, char: 'H' }, { r: 10, c: 6, char: 'N' }, { r: 10, c: 7, char: 'J' }, { r: 10, c: 8, char: 'I' },
+            { r: 11, c: 4, char: 'E' }, { r: 11, c: 6, char: 'D' }, { r: 11, c: 7, char: 'E' }, { r: 11, c: 8, char: 'V' }, { r: 11, c: 9, char: 'A' }, { r: 11, c: 10, char: 'A' }, { r: 11, c: 11, char: 'V' }, { r: 11, c: 12, char: 'A' }, { r: 11, c: 13, char: 'Y' },
+            { r: 12, c: 5, char: 'A' }, { r: 13, c: 5, char: 'N' }, { r: 14, c: 5, char: 'D' }
+        ];
+
+        const grid = document.getElementById('grid');
+        const map = {};
+
+        for (let r = 0; r < 14; r++) {
+            for (let c = 0; c < 12; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.id = `cell-${r}-${c}`;
+                grid.appendChild(cell);
+            }
+        }
+
+        const validCells = [
+            [0,6,'SUGAR',0],[1,6],[2,6],[3,6],[4,6,'R'],
+            [2,1,'SABKUCH'],[2,2],[2,3],[2,4],[2,5],[2,7],
+            [3,2,'SUP',1],[4,2],
+            [4,3,'PEAK'],[4,4],[4,5],
+            [5,4,'KIKO',1],[6,4],[6,5,'O'],
+            [7,0,'WEEWOO'],[7,1],[7,2],[7,3],[7,4],
+            [3,5,'HAANKYHAAN',1],[5,5],[8,5],[10,5],
+            [4,6,'AERODYNAMIC'],[4,7],[4,8],[4,9],[4,10],[4,11],
+            [9,2,'AREYYAAR'],[9,3],[9,4],[9,5],[9,6],[9,7],[9,8],[9,9],
+            [10,4,'HANJI'],[10,6],[10,7],
+            [11,4,'ENDEVAAVAY'],[11,6],[11,7],[11,8],[11,9],[11,10],[11,11],
+            [12,5,'ANDA',1],[13,5]
+        ];
+
+        layout.forEach(item => {
+            const key = `${item.r}-${item.c}`;
+            if (!map[key]) {
+                const cell = document.getElementById(`cell-${item.r}-${item.c}`);
+                if (cell) {
+                    cell.classList.add('active');
+                    const input = document.createElement('input');
+                    input.maxLength = 1;
+                    input.dataset.answer = item.char;
+                    input.dataset.r = item.r;
+                    input.dataset.c = item.c;
+                    
+                    input.addEventListener('input', (e) => {
+                        if (e.target.value) {
+                            focusNext(parseInt(e.target.dataset.r), parseInt(e.target.dataset.c));
+                        }
+                    });
+
+                    cell.appendChild(input);
+                    map[key] = input;
+                }
+            }
+        });
+
+        function focusNext(r, c) {
+            const nextRight = document.querySelector(`input[data-r="${r}"][data-c="${c+1}"]`);
+            const nextDown = document.querySelector(`input[data-r="${r+1}"][data-c="${c}"]`);
+            if (nextRight) nextRight.focus();
+            else if (nextDown) nextDown.focus();
+        }
+
+        function toggleHint(id) {
+            const hint = document.getElementById(id);
+            hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkAnswers() {
+            let correct = true;
+            let total = 0;
+            let filled = 0;
+
+            const inputs = document.querySelectorAll('.cell input');
+            inputs.forEach(input => {
+                total++;
+                if (input.value.toUpperCase() === input.dataset.answer) {
+                    filled++;
+                    input.style.color = '#2e7d32';
+                } else {
+                    correct = false;
+                    input.style.color = '#c62828';
+                }
+            });
+
+            const status = document.getElementById('status-msg');
+            if (correct && filled === total) {
+                status.style.color = '#2e7d32';
+                status.innerHTML = '🎉 Perfect! Unlocking Stage 2...';
+                setTimeout(() => {
+                    window.location.href = 'maze.html';
+                }, 1500);
             } else {
-                document.getElementById('msg').innerText = "Try again! Hint: Sweet dessert 🍰";
+                status.style.color = '#c62828';
+                status.innerText = 'Some answers are incorrect or missing. Check your hints!';
             }
         }
     </script>
