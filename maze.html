@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>..HELP TEDDIE REACH BUNNIE...!!</title>
+    <title>Level 2: Teddy's Grand Quest</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -69,28 +69,29 @@
         .door-blue { background: #1e90ff; }
         .teleport { background: #a29bfe; }
 
-        /* Speech Bubble adjustments */
+        /* Speech Bubble Positioning Fix */
         .speech-bubble {
             position: absolute;
             background: #ffffff;
             border: 2px solid #2f3542;
             border-radius: 12px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
+            padding: 6px 12px;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #d63031;
             white-space: nowrap;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            pointer-events: none; /* Allows clicking through if needed */
+            pointer-events: none;
             transition: all 0.3s ease;
             z-index: 20;
         }
         .speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -7px;
-            right: 12px;
-            border-width: 7px 7px 0;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0;
             border-style: solid;
             border-color: #ffffff transparent;
             display: block;
@@ -137,7 +138,7 @@
 <body>
 
     <div class="game-card">
-        <h1> ..bring teddie to his bunnie plez...! 🧸➡️🐰</h1>
+        <h1>Teddy's Epic Maze 🧸➡️🐰</h1>
         
         <div class="stats">
             <div>Moves: <span id="moveCount">0</span></div>
@@ -145,6 +146,7 @@
         </div>
 
         <div class="maze-container">
+            <!-- Bunny Speech Bubble -->
             <div id="bunnyBubble" class="speech-bubble" style="display: none;">..aoge na...?</div>
             <div id="maze"></div>
         </div>
@@ -182,7 +184,7 @@
             [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0],
             [7, 1, 2, 0, 6, 0, 1, 0, 0, 0, 0, 0],
             [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0], // Moved portal B to (10, 10)
+            [0, 0, 0, 0, 0, 0, 0, 8, 0, 6, 0, 0], // Portal B moved to (7, 10)
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
         ];
 
@@ -231,11 +233,11 @@
 
         function positionSpeechBubble() {
             const bubble = document.getElementById('bunnyBubble');
-            const cellWidth = 38 + 2; // Cell size + grid gap
+            const cellWidth = 38 + 2; 
             
-            // Offset bubble to float neatly above bunny without overlapping upper row
-            const bubbleX = (targetX * cellWidth) - 45;
-            const bubbleY = (targetY * cellWidth) - 32;
+            // Adjusted offset to place speech bubble directly above Bunny without covering adjacent tiles
+            const bubbleX = targetX * cellWidth - 30;
+            const bubbleY = targetY * cellWidth - 45;
 
             bubble.style.left = `${bubbleX}px`;
             bubble.style.top = `${bubbleY}px`;
@@ -278,11 +280,11 @@
                 }
             }
 
-            // Portal teleport mechanics updated to match portal B position at (10, 10)
+            // Teleport destination updated to (7, 10)
             if (targetCell === 7) {
-                newX = 10; newY = 10;
+                newX = 7; newY = 10; 
             } else if (targetCell === 8) {
-                newX = 0; newY = 8;
+                newX = 0; newY = 8;  
             }
 
             posX = newX;
