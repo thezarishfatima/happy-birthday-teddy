@@ -2,14 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday!</title>
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { text-align: center; font-family: 'Segoe UI', sans-serif; background: #ff7880; color: white; padding: 40px 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; color: #333; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 20px 0; }
-        .gallery img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; border: 3px solid #ff7880; }
+        body { 
+            text-align: center; 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #ff7880; 
+            color: white; 
+            padding: 40px 20px; 
+            margin: 0;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white; 
+            color: #333; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+        }
         h1 { color: #ff4757; }
         p { line-height: 1.6; font-size: 17px; }
+
+        /* Gift Gallery Grid */
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 15px; 
+            margin: 25px 0; 
+            justify-items: center;
+        }
+
+        /* Gift Box Wrapper */
+        .gift-box {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            perspective: 600px;
+        }
+
+        /* Revealed Image */
+        .gift-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 12px; 
+            border: 3px solid #ff7880; 
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Gift Lid & Wrapper Overlay */
+        .gift-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff4757;
+            border-radius: 12px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.6s ease;
+            transform-origin: top center;
+        }
+
+        /* Ribbon Ribbon Horizontal */
+        .gift-cover::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: #ffd166;
+        }
+
+        /* Ribbon Vertical */
+        .gift-cover::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: #ffd166;
+        }
+
+        /* Gift Bow Center */
+        .gift-bow {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ffb703;
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #d00000;
+            font-weight: bold;
+        }
+
+        /* Open Gift Animation State */
+        .gift-box.open .gift-cover {
+            transform: translateY(120px) rotateX(-90deg) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -18,9 +126,26 @@
         <p>..arey waaaoow ap ny to sari puzzles solve crli, itty saarp ho apto...</p>
 
         <div class="gallery">
-            <img src="baby1.jpg" alt="Baby Picture 1">
-            <img src="baby2.jpg" alt="Baby Picture 2">
-            <img src="baby3.jpg" alt="Baby Picture 3">
+            <div class="gift-box" onclick="openGift(this)">
+                <img src="baby1.jpg" alt="Baby Picture 1">
+                <div class="gift-cover">
+                    <div class="gift-bow">🎁</div>
+                </div>
+            </div>
+
+            <div class="gift-box" onclick="openGift(this)">
+                <img src="baby2.jpg" alt="Baby Picture 2">
+                <div class="gift-cover">
+                    <div class="gift-bow">🎁</div>
+                </div>
+            </div>
+
+            <div class="gift-box" onclick="openGift(this)">
+                <img src="baby3.jpg" alt="Baby Picture 3">
+                <div class="gift-cover">
+                    <div class="gift-bow">🎁</div>
+                </div>
+            </div>
         </div>
 
         <hr style="border: 0; height: 1px; background: #eee; margin: 20px 0;">
@@ -30,5 +155,25 @@
             ..pyare abhi, happy birthday once again..congratulations on completing the silly puzzles hehe..thank you so much for coming in my life and choosing to stay..you're the reason i've been smiling a whole lot more than what i knew as normal..the reason i don't feel the need to water myself down in order to be accepted..you make me happier everyday and i'll be forever grateful for that..we've known each other for so many years yet a look over my shoulder seems like it was just yesterday..time doesn't pass at a sensible time around you..hours feel like minutes and years feel like just yesterday..i love your presence so much man, even if i don't have 3D abhi wime, you never make me feel like you're absent..you are always there regardless of the miles and borders between us..thank you for being so sweet and kind towards me even wen em not at my best..thank you for being gentle with me wen em being chaotic and straight up acting like em high and thank you for being even more gentle wen em at an all time low..i really hope i can keep you forever..and i also hope that you start being nicer to yourself and realise that no matter how dark the night gets, there will always eventually be light..and i really hope that you find that light in every situation..and do know that even if at some point you can't seem to find any light at all..your bunnie will sit with you throughout the dark until we figure it all out..cuz as long as em breathing, you'll never be alone..you'll always have someone that loves and cares for you unconditionally..you won't ever have to do anything in order for me to be super duper proud of you always forever..you're so brilliant man..you are a literal ray of sunshine and you never fail to light my day right up..you heal things in me i never even knew needed healing and you do it all so effortlessly..please keep being my silly teddy..and take care of yourself..you mean the literal world to me abhie..look after my world please...
         </p>
     </div>
+
+    <script>
+        function openGift(element) {
+            if (!element.classList.contains('open')) {
+                element.classList.add('open');
+                
+                // Get click position for directed confetti burst
+                const rect = element.getBoundingClientRect();
+                const x = (rect.left + rect.width / 2) / window.innerWidth;
+                const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+                confetti({
+                    particleCount: 40,
+                    spread: 60,
+                    origin: { x: x, y: y },
+                    colors: ['#ff4757', '#ffd166', '#ffb703', '#ffffff']
+                });
+            }
+        }
+    </script>
 </body>
 </html>
