@@ -2,44 +2,142 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Level 2: Teddy's Maze</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 2: Teddy's Advanced Maze</title>
     <style>
-        body { text-align: center; font-family: sans-serif; background: #eccc68; padding: 20px; }
-        #maze { background: white; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 50px); grid-template-rows: repeat(5, 50px); gap: 2px; width: 258px; border: 4px solid #333; }
-        .cell { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; background: #f1f2f6; }
-        .wall { background: #2f3542; }
-        .controls { margin-top: 15px; }
-        .btn { padding: 10px 20px; font-size: 18px; margin: 3px; cursor: pointer; border-radius: 8px; border: none; background: #ff4757; color: white; }
+        body {
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eccc68;
+            padding: 20px;
+            color: #2f3542;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        #maze {
+            background: white;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(10, 36px);
+            grid-template-rows: repeat(10, 36px);
+            gap: 2px;
+            width: 378px;
+            border: 4px solid #2f3542;
+            border-radius: 8px;
+            padding: 2px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .cell {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: #f1f2f6;
+            border-radius: 4px;
+        }
+
+        .wall {
+            background: #2f3542;
+        }
+
+        .controls {
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            font-size: 16px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            background: #ff4757;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
-    <h1>Level 2: Help Teddy Reach Bunny! 🧸➡️🐰</h1>
+    <h1>Help Teddy Reach Bunny! 🧸➡️🐰</h1>
+    
+    <div class="stats-bar">
+        <span>Moves: <span id="moveCount">0</span></span>
+        <span>Time: <span id="timer">0</span>s</span>
+    </div>
+
     <div id="maze"></div>
 
     <div class="controls">
-        <button class="btn" onclick="move(0, -1)">⬆️</button><br>
-        <button class="btn" onclick="move(-1, 0)">⬅️</button>
-        <button class="btn" onclick="move(1, 0)">➡️</button><br>
-        <button class="btn" onclick="move(0, 1)">⬇️</button>
+        <div><button class="btn" onclick="move(0, -1)">⬆️</button></div>
+        <div>
+            <button class="btn" onclick="move(-1, 0)">⬅️</button>
+            <button class="btn" onclick="move(1, 0)">➡️</button>
+        </div>
+        <div><button class="btn" onclick="move(0, 1)">⬇️</button></div>
     </div>
 
     <script>
-        // 0 = path, 1 = wall
-        const map = [
-            [0, 1, 0, 0, 0],
-            [0, 1, 0, 1, 0],
-            [0, 0, 0, 1, 0],
-            [1, 1, 0, 1, 0],
-            [0, 0, 0, 0, 0]
-        ];
+        const GRID_SIZE = 10;
+        let map = [];
         let posX = 0, posY = 0;
-        const targetX = 4, targetY = 4;
+        const targetX = GRID_SIZE - 1, targetY = GRID_SIZE - 1;
+        let moves = 0;
+        let seconds = 0;
+        let timerInterval = null;
+
+        // Dynamic Maze Generation using Depth-First Search (DFS) Backtracking
+        function generateMaze() {
+            map = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(1));
+            
+            function walk(x, y) {
+                map[y][x] = 0;
+                const directions = [[0,-2],[0,2],[-2,0],[2,0]].sort(() => Math.random() - 0.5);
+
+                for (let [dx, dy] of directions) {
+                    let nx = x + dx, ny = y + dy;
+                    if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && map[ny][nx] === 1) {
+                        map[y + dy / 2][x + dx / 2] = 0;
+                        walk(nx, ny);
+                    }
+                }
+            }
+
+            walk(0, 0);
+            map[0][0] = 0;
+            map[GRID_SIZE - 1][GRID_SIZE - 1] = 0;
+            map[GRID_SIZE - 2][GRID_SIZE - 1] = 0; // Ensure goal path accessibility
+        }
+
+        function startTimer() {
+            if (!timerInterval) {
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    document.getElementById('timer').innerText = seconds;
+                }, 1000);
+            }
+        }
 
         function renderMaze() {
             const container = document.getElementById('maze');
             container.innerHTML = '';
-            for (let y = 0; y < 5; y++) {
-                for (let x = 0; x < 5; x++) {
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
                     const cell = document.createElement('div');
                     cell.className = 'cell' + (map[y][x] === 1 ? ' wall' : '');
                     if (x === posX && y === posY) cell.innerText = '🧸';
@@ -50,20 +148,38 @@
         }
 
         function move(dx, dy) {
+            startTimer();
             let newX = posX + dx;
             let newY = posY + dy;
-            if (newX >= 0 && newX < 5 && newY >= 0 && newY < 5 && map[newY][newX] !== 1) {
+
+            if (newX >= 0 && newX < GRID_SIZE && newY >= 0 && newY < GRID_SIZE && map[newY][newX] !== 1) {
                 posX = newX;
                 posY = newY;
+                moves++;
+                document.getElementById('moveCount').innerText = moves;
                 renderMaze();
+
                 if (posX === targetX && posY === targetY) {
+                    clearInterval(timerInterval);
                     setTimeout(() => {
-                        alert("You made it! Opening your birthday message...");
+                        alert(`You made it in ${moves} moves and ${seconds} seconds! Opening your birthday message...`);
                         window.location.href = "message.html";
                     }, 200);
                 }
             }
         }
+
+        // Add Keyboard Control Support (Arrow Keys / WASD)
+        window.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowUp': case 'w': case 'W': move(0, -1); break;
+                case 'ArrowDown': case 's': case 'S': move(0, 1); break;
+                case 'ArrowLeft': case 'a': case 'A': move(-1, 0); break;
+                case 'ArrowRight': case 'd': case 'D': move(1, 0); break;
+            }
+        });
+
+        generateMaze();
         renderMaze();
     </script>
 </body>
