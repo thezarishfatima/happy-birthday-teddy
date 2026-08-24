@@ -3,175 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level 2: Teddy's Advanced Maze</title>
+    <title>Level 2: Teddy's Advanced Quest</title>
     <style>
-        body {
-            text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #eccc68;
-            padding: 20px;
-            color: #2f3542;
-        }
-
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        #maze {
-            background: white;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(10, 36px);
-            grid-template-rows: repeat(10, 36px);
-            gap: 2px;
-            width: 378px;
-            border: 4px solid #2f3542;
-            border-radius: 8px;
-            padding: 2px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-        }
-
-        .cell {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            background: #f1f2f6;
-            border-radius: 4px;
-        }
-
-        .wall {
-            background: #2f3542;
-        }
-
-        .controls {
-            margin-top: 15px;
-        }
-
-        .btn {
-            padding: 10px 18px;
-            font-size: 16px;
-            margin: 2px;
-            cursor: pointer;
-            border-radius: 8px;
-            border: none;
-            background: #ff4757;
-            color: white;
-            font-weight: bold;
-            transition: transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
+        body { text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eccc68; padding: 20px; color: #2f3542; }
+        .game-card { background: white; max-width: 450px; margin: 0 auto; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .stats { display: flex; justify-content: space-around; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem; }
+        #maze { display: grid; grid-template-columns: repeat(8, 45px); grid-template-rows: repeat(8, 45px); gap: 3px; justify-content: center; background: #2f3542; padding: 6px; border-radius: 8px; margin: 0 auto; }
+        .cell { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 24px; background: #f1f2f6; border-radius: 4px; user-select: none; }
+        .wall { background: #57606f; }
+        .door { background: #ff7f50; }
+        .controls { margin-top: 20px; }
+        .btn { width: 60px; height: 50px; font-size: 20px; margin: 3px; cursor: pointer; border-radius: 8px; border: none; background: #ff4757; color: white; transition: background 0.2s, transform 0.1s; }
+        .btn:active { transform: scale(0.95); background: #ff6b81; }
+        .instructions { font-size: 0.85rem; color: #747d8c; margin-top: 15px; text-align: left; }
     </style>
 </head>
 <body>
-    <h1>Help Teddy Reach Bunny! 🧸➡️🐰</h1>
-    
-    <div class="stats-bar">
-        <span>Moves: <span id="moveCount">0</span></span>
-        <span>Time: <span id="timer">0</span>s</span>
-    </div>
+    <div class="game-card">
+        <h1>Teddy's Quest 🧸➡️🐰</h1>
+        <div class="stats">
+            <div>Moves: <span id="moveCount">0</span></div>
+            <div>Inventory: <span id="hasKey">❌ No Key</span></div>
+        </div>
+        <div id="maze"></div>
 
-    <div id="maze"></div>
-
-    <div class="controls">
-        <div><button class="btn" onclick="move(0, -1)">⬆️</button></div>
-        <div>
+        <div class="controls">
+            <button class="btn" onclick="move(0, -1)">⬆️</button><br>
             <button class="btn" onclick="move(-1, 0)">⬅️</button>
+            <button class="btn" onclick="move(0, 1)">⬇️</button>
             <button class="btn" onclick="move(1, 0)">➡️</button>
         </div>
-        <div><button class="btn" onclick="move(0, 1)">⬇️</button></div>
+
+        <div class="instructions">
+            <p><strong>Legend:</strong></p>
+            <ul>
+                <li>🔑 Grab the key to unlock the door (🚪).</li>
+                <li>📦 Push boxes into paths or target slots to clear paths.</li>
+                <li>⌨️ Keyboard Arrow keys & WASD supported!</li>
+            </ul>
+        </div>
     </div>
 
     <script>
-        const GRID_SIZE = 10;
-        let map = [];
+        // 0 = Path, 1 = Wall, 2 = Key, 3 = Locked Door, 4 = Pushable Box
+        const map = [
+            [0, 0, 1, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 1, 1, 1, 0],
+            [0, 0, 0, 0, 0, 2, 1, 0],
+            [0, 1, 1, 1, 1, 0, 1, 0],
+            [0, 4, 0, 0, 1, 0, 0, 0],
+            [1, 1, 1, 0, 1, 1, 3, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 0, 0]
+        ];
+
         let posX = 0, posY = 0;
-        const targetX = GRID_SIZE - 1, targetY = GRID_SIZE - 1;
+        const targetX = 7, targetY = 6;
+        let keyCollected = false;
         let moves = 0;
-        let seconds = 0;
-        let timerInterval = null;
-
-        // Dynamic Maze Generation using Depth-First Search (DFS) Backtracking
-        function generateMaze() {
-            map = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(1));
-            
-            function walk(x, y) {
-                map[y][x] = 0;
-                const directions = [[0,-2],[0,2],[-2,0],[2,0]].sort(() => Math.random() - 0.5);
-
-                for (let [dx, dy] of directions) {
-                    let nx = x + dx, ny = y + dy;
-                    if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && map[ny][nx] === 1) {
-                        map[y + dy / 2][x + dx / 2] = 0;
-                        walk(nx, ny);
-                    }
-                }
-            }
-
-            walk(0, 0);
-            map[0][0] = 0;
-            map[GRID_SIZE - 1][GRID_SIZE - 1] = 0;
-            map[GRID_SIZE - 2][GRID_SIZE - 1] = 0; // Ensure goal path accessibility
-        }
-
-        function startTimer() {
-            if (!timerInterval) {
-                timerInterval = setInterval(() => {
-                    seconds++;
-                    document.getElementById('timer').innerText = seconds;
-                }, 1000);
-            }
-        }
 
         function renderMaze() {
             const container = document.getElementById('maze');
             container.innerHTML = '';
-            for (let y = 0; y < GRID_SIZE; y++) {
-                for (let x = 0; x < GRID_SIZE; x++) {
+            for (let y = 0; y < 8; y++) {
+                for (let x = 0; x < 8; x++) {
                     const cell = document.createElement('div');
-                    cell.className = 'cell' + (map[y][x] === 1 ? ' wall' : '');
-                    if (x === posX && y === posY) cell.innerText = '🧸';
-                    else if (x === targetX && y === targetY) cell.innerText = '🐰';
+                    let cellClass = 'cell';
+                    let content = '';
+
+                    if (map[y][x] === 1) cellClass += ' wall';
+                    else if (map[y][x] === 3) { cellClass += ' door'; content = '🚪'; }
+                    else if (map[y][x] === 2) content = '🔑';
+                    else if (map[y][x] === 4) content = '📦';
+
+                    if (x === posX && y === posY) content = '🧸';
+                    else if (x === targetX && y === targetY) content = '🐰';
+
+                    cell.className = cellClass;
+                    cell.innerText = content;
                     container.appendChild(cell);
                 }
             }
+            document.getElementById('moveCount').innerText = moves;
+            document.getElementById('hasKey').innerText = keyCollected ? '🔑 Key' : '❌ No Key';
         }
 
         function move(dx, dy) {
-            startTimer();
             let newX = posX + dx;
             let newY = posY + dy;
 
-            if (newX >= 0 && newX < GRID_SIZE && newY >= 0 && newY < GRID_SIZE && map[newY][newX] !== 1) {
-                posX = newX;
-                posY = newY;
-                moves++;
-                document.getElementById('moveCount').innerText = moves;
-                renderMaze();
+            // Boundary check
+            if (newX < 0 || newX >= 8 || newY < 0 || newY >= 8) return;
 
-                if (posX === targetX && posY === targetY) {
-                    clearInterval(timerInterval);
-                    setTimeout(() => {
-                        alert(`You made it in ${moves} moves and ${seconds} seconds! Opening your birthday message...`);
-                        window.location.href = "message.html";
-                    }, 200);
+            let targetCell = map[newY][newX];
+
+            // Wall check
+            if (targetCell === 1) return;
+
+            // Door check
+            if (targetCell === 3) {
+                if (keyCollected) {
+                    map[newY][newX] = 0; // Unlock door
+                } else {
+                    return; // Locked
                 }
+            }
+
+            // Box push check
+            if (targetCell === 4) {
+                let boxNewX = newX + dx;
+                let boxNewY = newY + dy;
+                if (
+                    boxNewX >= 0 && boxNewX < 8 && 
+                    boxNewY >= 0 && boxNewY < 8 && 
+                    map[boxNewY][boxNewX] === 0
+                ) {
+                    map[boxNewY][boxNewX] = 4;
+                    map[newY][newX] = 0;
+                } else {
+                    return; // Cannot push box
+                }
+            }
+
+            // Move player
+            posX = newX;
+            posY = newY;
+            moves++;
+
+            // Pick up key
+            if (map[posY][posX] === 2) {
+                keyCollected = true;
+                map[posY][posX] = 0;
+            }
+
+            renderMaze();
+
+            // Win condition
+            if (posX === targetX && posY === targetY) {
+                setTimeout(() => {
+                    alert(`🎉 Level Complete in ${moves} moves!\nOpening birthday message...`);
+                    window.location.href = "message.html";
+                }, 150);
             }
         }
 
-        // Add Keyboard Control Support (Arrow Keys / WASD)
+        // Keyboard navigation
         window.addEventListener('keydown', (e) => {
-            switch(e.key) {
+            switch (e.key) {
                 case 'ArrowUp': case 'w': case 'W': move(0, -1); break;
                 case 'ArrowDown': case 's': case 'S': move(0, 1); break;
                 case 'ArrowLeft': case 'a': case 'A': move(-1, 0); break;
@@ -179,7 +157,6 @@
             }
         });
 
-        generateMaze();
         renderMaze();
     </script>
 </body>
