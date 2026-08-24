@@ -3,78 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level 2: Teddy's Advanced Quest</title>
+    <title>Level 2: Teddy's Grand Quest</title>
     <style>
-        body { text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eccc68; padding: 20px; color: #2f3542; }
-        .game-card { background: white; max-width: 450px; margin: 0 auto; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-        .stats { display: flex; justify-content: space-around; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem; }
-        #maze { display: grid; grid-template-columns: repeat(8, 45px); grid-template-rows: repeat(8, 45px); gap: 3px; justify-content: center; background: #2f3542; padding: 6px; border-radius: 8px; margin: 0 auto; }
-        .cell { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 24px; background: #f1f2f6; border-radius: 4px; user-select: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            text-align: center; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); 
+            padding: 20px 10px; 
+            min-height: 100vh;
+            color: #2f3542; 
+        }
+        .game-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            max-width: 580px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 10px; }
+        
+        .stats { 
+            display: flex; 
+            justify-content: space-around; 
+            margin-bottom: 15px; 
+            font-weight: bold; 
+            font-size: 0.95rem; 
+            background: #ffeaa7;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .maze-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        #maze { 
+            display: grid; 
+            grid-template-columns: repeat(12, 38px); 
+            grid-template-rows: repeat(12, 38px); 
+            gap: 2px; 
+            justify-content: center; 
+            background: #2f3542; 
+            padding: 5px; 
+            border-radius: 10px; 
+        }
+
+        .cell { 
+            width: 38px; 
+            height: 38px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 20px; 
+            background: #f1f2f6; 
+            border-radius: 4px; 
+            user-select: none; 
+            transition: background 0.2s;
+        }
         .wall { background: #57606f; }
-        .door { background: #ff7f50; }
-        .controls { margin-top: 20px; }
-        .btn { width: 60px; height: 50px; font-size: 20px; margin: 3px; cursor: pointer; border-radius: 8px; border: none; background: #ff4757; color: white; transition: background 0.2s, transform 0.1s; }
-        .btn:active { transform: scale(0.95); background: #ff6b81; }
-        .instructions { font-size: 0.85rem; color: #747d8c; margin-top: 15px; text-align: left; }
+        .door-red { background: #ff4757; }
+        .door-blue { background: #1e90ff; }
+        .teleport { background: #a29bfe; }
+
+        /* Speech Bubbles */
+        .speech-bubble {
+            position: absolute;
+            background: #ffffff;
+            border: 2px solid #2f3542;
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #d63031;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: #ffffff transparent;
+            display: block;
+            width: 0;
+        }
+
+        .controls { margin-top: 15px; }
+        .btn-row { display: flex; justify-content: center; gap: 5px; }
+        .btn { 
+            width: 55px; 
+            height: 45px; 
+            font-size: 18px; 
+            margin: 2px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            background: #ff4757; 
+            color: white; 
+            box-shadow: 0 4px 0 #d63031;
+            transition: all 0.1s;
+        }
+        .btn:active { 
+            transform: translateY(3px); 
+            box-shadow: 0 1px 0 #d63031;
+        }
+
+        .legend { 
+            font-size: 0.8rem; 
+            color: #636e72; 
+            margin-top: 15px; 
+            text-align: left;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
+
     <div class="game-card">
-        <h1>Teddy's Quest 🧸➡️🐰</h1>
+        <h1>Teddy's Epic Maze 🧸➡️🐰</h1>
+        
         <div class="stats">
             <div>Moves: <span id="moveCount">0</span></div>
-            <div>Inventory: <span id="hasKey">❌ No Key</span></div>
+            <div>Keys: <span id="keysHeld">None</span></div>
         </div>
-        <div id="maze"></div>
+
+        <div class="maze-container">
+            <!-- Bunny Speech Bubble -->
+            <div id="bunnyBubble" class="speech-bubble" style="display: none;">..aoge na...?</div>
+            <div id="maze"></div>
+        </div>
 
         <div class="controls">
-            <button class="btn" onclick="move(0, -1)">⬆️</button><br>
-            <button class="btn" onclick="move(-1, 0)">⬅️</button>
-            <button class="btn" onclick="move(0, 1)">⬇️</button>
-            <button class="btn" onclick="move(1, 0)">➡️</button>
+            <div class="btn-row"><button class="btn" onclick="move(0, -1)">⬆️</button></div>
+            <div class="btn-row">
+                <button class="btn" onclick="move(-1, 0)">⬅️</button>
+                <button class="btn" onclick="move(0, 1)">⬇️</button>
+                <button class="btn" onclick="move(1, 0)">➡️</button>
+            </div>
         </div>
 
-        <div class="instructions">
-            <p><strong>Legend:</strong></p>
-            <ul>
-                <li>🔑 Grab the key to unlock the door (🚪).</li>
-                <li>📦 Push boxes into paths or target slots to clear paths.</li>
-                <li>⌨️ Keyboard Arrow keys & WASD supported!</li>
-            </ul>
+        <div class="legend">
+            <strong>Legend & Mechanics:</strong>
+            <div class="legend-grid">
+                <span>🔴 Key/Door: 🔑 / 🚪</span>
+                <span>🔵 Key/Door: 🗝️ / 💙</span>
+                <span>📦 Pushable Box</span>
+                <span>🌀 Teleporter Portal</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // 0 = Path, 1 = Wall, 2 = Key, 3 = Locked Door, 4 = Pushable Box
+        // 0=Path, 1=Wall, 2=Red Key, 3=Red Door, 4=Blue Key, 5=Blue Door, 6=Box, 7=Portal A, 8=Portal B
         const map = [
-            [0, 0, 1, 0, 0, 0, 0, 0],
-            [1, 0, 1, 0, 1, 1, 1, 0],
-            [0, 0, 0, 0, 0, 2, 1, 0],
-            [0, 1, 1, 1, 1, 0, 1, 0],
-            [0, 4, 0, 0, 1, 0, 0, 0],
-            [1, 1, 1, 0, 1, 1, 3, 1],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 1, 1, 1, 1, 0, 0]
+            [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0],
+            [0, 0, 0, 0, 1, 2, 0, 0, 1, 4, 1, 0],
+            [0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0],
+            [0, 6, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [1, 1, 1, 3, 1, 0, 1, 1, 1, 5, 1, 1],
+            [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+            [7, 1, 2, 0, 6, 0, 1, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 8],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
         ];
 
         let posX = 0, posY = 0;
-        const targetX = 7, targetY = 6;
-        let keyCollected = false;
+        const targetX = 11, targetY = 11;
+        let hasRedKey = false;
+        let hasBlueKey = false;
         let moves = 0;
 
         function renderMaze() {
             const container = document.getElementById('maze');
             container.innerHTML = '';
-            for (let y = 0; y < 8; y++) {
-                for (let x = 0; x < 8; x++) {
+
+            for (let y = 0; y < 12; y++) {
+                for (let x = 0; x < 12; x++) {
                     const cell = document.createElement('div');
                     let cellClass = 'cell';
                     let content = '';
 
-                    if (map[y][x] === 1) cellClass += ' wall';
-                    else if (map[y][x] === 3) { cellClass += ' door'; content = '🚪'; }
-                    else if (map[y][x] === 2) content = '🔑';
-                    else if (map[y][x] === 4) content = '📦';
+                    const type = map[y][x];
+                    if (type === 1) cellClass += ' wall';
+                    else if (type === 2) content = '🔑';
+                    else if (type === 3) { cellClass += ' door-red'; content = '🚪'; }
+                    else if (type === 4) content = '🗝️';
+                    else if (type === 5) { cellClass += ' door-blue'; content = '💙'; }
+                    else if (type === 6) content = '📦';
+                    else if (type === 7 || type === 8) { cellClass += ' teleport'; content = '🌀'; }
 
                     if (x === posX && y === posY) content = '🧸';
                     else if (x === targetX && y === targetY) content = '🐰';
@@ -84,70 +221,97 @@
                     container.appendChild(cell);
                 }
             }
+
+            // Update UI Stats
             document.getElementById('moveCount').innerText = moves;
-            document.getElementById('hasKey').innerText = keyCollected ? '🔑 Key' : '❌ No Key';
+            let keys = [];
+            if (hasRedKey) keys.push('🔴 Red Key');
+            if (hasBlueKey) keys.push('🔵 Blue Key');
+            document.getElementById('keysHeld').innerText = keys.length ? keys.join(', ') : 'None';
+
+            positionSpeechBubble();
+        }
+
+        function positionSpeechBubble() {
+            const bubble = document.getElementById('bunnyBubble');
+            const cellWidth = 38 + 2; // Cell width + gap
+            
+            // Position bubble above the target Bunny (11, 11)
+            const bubbleX = targetX * cellWidth - 25;
+            const bubbleY = targetY * cellWidth - 35;
+
+            bubble.style.left = `${bubbleX}px`;
+            bubble.style.top = `${bubbleY}px`;
+            
+            if (posX === targetX && posY === targetY) {
+                bubble.innerText = "yayyyyyyyyy..!";
+                bubble.style.background = "#ffeaa7";
+                bubble.style.borderColor = "#fdcb6e";
+                bubble.style.display = "block";
+            } else {
+                bubble.innerText = "..aoge na...?";
+                bubble.style.display = "block";
+            }
         }
 
         function move(dx, dy) {
             let newX = posX + dx;
             let newY = posY + dy;
 
-            // Boundary check
-            if (newX < 0 || newX >= 8 || newY < 0 || newY >= 8) return;
+            if (newX < 0 || newX >= 12 || newY < 0 || newY >= 12) return;
 
             let targetCell = map[newY][newX];
 
             // Wall check
             if (targetCell === 1) return;
 
-            // Door check
-            if (targetCell === 3) {
-                if (keyCollected) {
-                    map[newY][newX] = 0; // Unlock door
-                } else {
-                    return; // Locked
-                }
-            }
+            // Doors check
+            if (targetCell === 3 && !hasRedKey) return;
+            if (targetCell === 3 && hasRedKey) map[newY][newX] = 0;
 
-            // Box push check
-            if (targetCell === 4) {
-                let boxNewX = newX + dx;
-                let boxNewY = newY + dy;
-                if (
-                    boxNewX >= 0 && boxNewX < 8 && 
-                    boxNewY >= 0 && boxNewY < 8 && 
-                    map[boxNewY][boxNewX] === 0
-                ) {
-                    map[boxNewY][boxNewX] = 4;
+            if (targetCell === 5 && !hasBlueKey) return;
+            if (targetCell === 5 && hasBlueKey) map[newY][newX] = 0;
+
+            // Box Push Logic
+            if (targetCell === 6) {
+                let boxX = newX + dx;
+                let boxY = newY + dy;
+                if (boxX >= 0 && boxX < 12 && boxY >= 0 && boxY < 12 && map[boxY][boxX] === 0) {
+                    map[boxY][boxX] = 6;
                     map[newY][newX] = 0;
                 } else {
-                    return; // Cannot push box
+                    return;
                 }
             }
 
-            // Move player
+            // Teleportation
+            if (targetCell === 7) {
+                newX = 11; newY = 10; // Jump to Portal B
+            } else if (targetCell === 8) {
+                newX = 0; newY = 8;  // Jump to Portal A
+            }
+
+            // Move Teddy
             posX = newX;
             posY = newY;
             moves++;
 
-            // Pick up key
-            if (map[posY][posX] === 2) {
-                keyCollected = true;
-                map[posY][posX] = 0;
-            }
+            // Collect Keys
+            if (map[posY][posX] === 2) { hasRedKey = true; map[posY][posX] = 0; }
+            if (map[posY][posX] === 4) { hasBlueKey = true; map[posY][posX] = 0; }
 
             renderMaze();
 
-            // Win condition
+            // Win Condition
             if (posX === targetX && posY === targetY) {
                 setTimeout(() => {
-                    alert(`🎉 Level Complete in ${moves} moves!\nOpening birthday message...`);
+                    alert(`🎉 You reunited Teddy & Bunny in ${moves} moves!\nOpening your birthday message...`);
                     window.location.href = "message.html";
-                }, 150);
+                }, 400);
             }
         }
 
-        // Keyboard navigation
+        // Keyboard Controls
         window.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'ArrowUp': case 'w': case 'W': move(0, -1); break;
