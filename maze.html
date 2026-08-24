@@ -236,9 +236,9 @@
             const bubble = document.getElementById('bunnyBubble');
             const cellWidth = 38 + 2; // Cell width + gap
             
-            // Position speech bubble safely over the solid wall block directly above Bunny
+            // Adjusted speech bubble position vertically lower over the wall block
             const bubbleX = targetX * cellWidth - 30;
-            const bubbleY = (targetY - 2) * cellWidth - 5;
+            const bubbleY = (targetY - 1) * cellWidth - 15;
 
             bubble.style.left = `${bubbleX}px`;
             bubble.style.top = `${bubbleY}px`;
