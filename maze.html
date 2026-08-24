@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level 2: Teddy's Grand Quest</title>
+    <title>..HELP TEDDIE REACH BUNNIE...!!</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -69,29 +69,28 @@
         .door-blue { background: #1e90ff; }
         .teleport { background: #a29bfe; }
 
-        /* Speech Bubbles */
+        /* Speech Bubble adjustments */
         .speech-bubble {
             position: absolute;
             background: #ffffff;
             border: 2px solid #2f3542;
             border-radius: 12px;
-            padding: 6px 12px;
-            font-size: 0.85rem;
+            padding: 5px 10px;
+            font-size: 0.8rem;
             font-weight: bold;
             color: #d63031;
             white-space: nowrap;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            pointer-events: none;
+            pointer-events: none; /* Allows clicking through if needed */
             transition: all 0.3s ease;
-            z-index: 10;
+            z-index: 20;
         }
         .speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 8px 8px 0;
+            bottom: -7px;
+            right: 12px;
+            border-width: 7px 7px 0;
             border-style: solid;
             border-color: #ffffff transparent;
             display: block;
@@ -138,7 +137,7 @@
 <body>
 
     <div class="game-card">
-        <h1>Teddy's Epic Maze 🧸➡️🐰</h1>
+        <h1> ..bring teddie to his bunnie plez...! 🧸➡️🐰</h1>
         
         <div class="stats">
             <div>Moves: <span id="moveCount">0</span></div>
@@ -146,7 +145,6 @@
         </div>
 
         <div class="maze-container">
-            <!-- Bunny Speech Bubble -->
             <div id="bunnyBubble" class="speech-bubble" style="display: none;">..aoge na...?</div>
             <div id="maze"></div>
         </div>
@@ -184,7 +182,7 @@
             [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0],
             [7, 1, 2, 0, 6, 0, 1, 0, 0, 0, 0, 0],
             [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 8],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0], // Moved portal B to (10, 10)
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
         ];
 
@@ -222,7 +220,6 @@
                 }
             }
 
-            // Update UI Stats
             document.getElementById('moveCount').innerText = moves;
             let keys = [];
             if (hasRedKey) keys.push('🔴 Red Key');
@@ -234,11 +231,11 @@
 
         function positionSpeechBubble() {
             const bubble = document.getElementById('bunnyBubble');
-            const cellWidth = 38 + 2; // Cell width + gap
+            const cellWidth = 38 + 2; // Cell size + grid gap
             
-            // Position bubble above the target Bunny (11, 11)
-            const bubbleX = targetX * cellWidth - 25;
-            const bubbleY = targetY * cellWidth - 35;
+            // Offset bubble to float neatly above bunny without overlapping upper row
+            const bubbleX = (targetX * cellWidth) - 45;
+            const bubbleY = (targetY * cellWidth) - 32;
 
             bubble.style.left = `${bubbleX}px`;
             bubble.style.top = `${bubbleY}px`;
@@ -262,17 +259,14 @@
 
             let targetCell = map[newY][newX];
 
-            // Wall check
             if (targetCell === 1) return;
 
-            // Doors check
             if (targetCell === 3 && !hasRedKey) return;
             if (targetCell === 3 && hasRedKey) map[newY][newX] = 0;
 
             if (targetCell === 5 && !hasBlueKey) return;
             if (targetCell === 5 && hasBlueKey) map[newY][newX] = 0;
 
-            // Box Push Logic
             if (targetCell === 6) {
                 let boxX = newX + dx;
                 let boxY = newY + dy;
@@ -284,25 +278,22 @@
                 }
             }
 
-            // Teleportation
+            // Portal teleport mechanics updated to match portal B position at (10, 10)
             if (targetCell === 7) {
-                newX = 11; newY = 10; // Jump to Portal B
+                newX = 10; newY = 10;
             } else if (targetCell === 8) {
-                newX = 0; newY = 8;  // Jump to Portal A
+                newX = 0; newY = 8;
             }
 
-            // Move Teddy
             posX = newX;
             posY = newY;
             moves++;
 
-            // Collect Keys
             if (map[posY][posX] === 2) { hasRedKey = true; map[posY][posX] = 0; }
             if (map[posY][posX] === 4) { hasBlueKey = true; map[posY][posX] = 0; }
 
             renderMaze();
 
-            // Win Condition
             if (posX === targetX && posY === targetY) {
                 setTimeout(() => {
                     alert(`🎉 You reunited Teddy & Bunny in ${moves} moves!\nOpening your birthday message...`);
@@ -311,7 +302,6 @@
             }
         }
 
-        // Keyboard Controls
         window.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'ArrowUp': case 'w': case 'W': move(0, -1); break;
