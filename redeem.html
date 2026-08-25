@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Redemption Slot!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #ff7880;
+            color: #333;
+            text-align: center;
+            padding: 30px 15px;
+            margin: 0;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        h1 { color: #ff4757; margin-bottom: 5px; }
+        .back-link {
+            display: inline-block;
+            color: #d81b60;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: #fff0f3;
+            padding: 8px 18px;
+            border-radius: 20px;
+        }
+
+        /* Drop Zone / Slot Box */
+        .slot-container {
+            margin: 30px auto;
+            width: 100%;
+            max-width: 380px;
+            height: 220px;
+            border: 3px dashed #ff4757;
+            border-radius: 20px;
+            background: #fff5f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .slot-container.drag-over {
+            background: #ffe3e6;
+            border-color: #d81b60;
+            transform: scale(1.02);
+        }
+        .slot-icon { font-size: 3rem; margin-bottom: 10px; }
+        .slot-text { font-weight: bold; color: #ff4757; font-size: 1.1rem; }
+
+        /* Wallet Inventory Area */
+        .wallet-section {
+            margin-top: 30px;
+            background: #fdf2f4;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        .ticket-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+            min-height: 100px;
+        }
+
+        /* Draggable Ticket Card */
+        .draggable-ticket {
+            background: white;
+            border: 2px solid #f48fb1;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+            color: #d81b60;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .draggable-ticket:active { cursor: grabbing; transform: scale(0.95); }
+        .draggable-ticket.redeemed {
+            opacity: 0.5;
+            cursor: not-allowed;
+            text-decoration: line-through;
+            border-color: #ccc;
+            background: #eee;
+            color: #888;
+        }
+
+        /* Unlocked Voucher Announcement Modal */
+        .reward-card {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border: 2px solid #81c784;
+            border-radius: 15px;
+            color: #2e7d32;
+            animation: popIn 0.4s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Reset Button */
+        .reset-btn {
+            margin-top: 25px;
+            background: transparent;
+            border: 1px solid #ccc;
+            color: #888;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="message.html" class="back-link">⬅️ Back to Birthday Page</a>
+
+        <h1>🎟️ Ticket Redemption Slot</h1>
+        <p>Drag a ticket from your wallet and drop it into the slot below to redeem!</p>
+
+        <!-- The Drop Slot -->
+        <div class="slot-container" id="drop-slot" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+            <div class="slot-icon">🎰</div>
+            <div class="slot-text">DROP TICKET HERE TO REDEEM</div>
+        </div>
+
+        <!-- Reward Banner -->
+        <div id="reward-banner" class="reward-card">
+            <h2 id="reward-title" style="margin:0 0 5px 0;">🎉 Ticket Redeemed!</h2>
+            <p id="reward-desc" style="margin:0; font-size:16px;"></p>
+        </div>
+
+        <!-- Wallet Inventory -->
+        <div class="wallet-section">
+            <h3>💼 Your Wallet Inventory</h3>
+            <div class="ticket-list" id="ticket-inventory">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <button class="reset-btn" onclick="clearWallet()">Reset Wallet Data 🔄</button>
+    </div>
+
+    <script>
+        const ticketData = {
+            't1': { name: 'Tikit #001', reward: '✨ Voucher Unlocked: Unlimited Hugs & Lifetime Friendship Pass! 🌸' },
+            't2': { name: 'Tikit #002', reward: '✨ Voucher Unlocked: Late Night Vent Session & Late Night Calls! 📞' },
+            't3': { name: 'Tikit #003', reward: '✨ Voucher Unlocked: One Free Wish Granted by Bunnie! 🎁' }
+        };
+
+        function renderWallet() {
+            const inventory = document.getElementById('ticket-inventory');
+            inventory.innerHTML = '';
+            
+            let collected = JSON.parse(localStorage.getItem('myTickets') || '[]');
+            let redeemed = JSON.parse(localStorage.getItem('redeemedTickets') || '[]');
+
+            if (collected.length === 0) {
+                inventory.innerHTML = '<p style="color:#888;">No tickets in your wallet yet! Go back and unbox them. 🎁</p>';
+                return;
+            }
+
+            collected.forEach(id => {
+                const isRedeemed = redeemed.includes(id);
+                const item = document.createElement('div');
+                item.className = 'draggable-ticket' + (isRedeemed ? ' redeemed' : '');
+                item.innerText = (isRedeemed ? '✅ ' : '🎟️ ') + ticketData[id].name;
+                
+                if (!isRedeemed) {
+                    item.draggable = true;
+                    item.ondragstart = (e) => e.dataTransfer.setData('text/plain', id);
+                }
+
+                inventory.appendChild(item);
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('drop-slot').classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            document.getElementById('drop-slot').classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const slot = document.getElementById('drop-slot');
+            slot.classList.remove('drag-over');
+
+            const id = e.dataTransfer.getData('text/plain');
+            if (id && ticketData[id]) {
+                redeemTicket(id);
+            }
+        }
+
+        function redeemTicket(id) {
+            let redeemed = JSON.parse(localStorage.getItem('redeemedTickets') || '[]');
+            if (!redeemed.includes(id)) {
+                redeemed.push(id);
+                localStorage.setItem('redeemedTickets', JSON.stringify(redeemed));
+
+                // Display reward
+                const banner = document.getElementById('reward-banner');
+                document.getElementById('reward-desc').innerText = ticketData[id].reward;
+                banner.style.display = 'block';
+
+                renderWallet();
+            }
+        }
+
+        function clearWallet() {
+            localStorage.removeItem('myTickets');
+            localStorage.removeItem('redeemedTickets');
+            document.getElementById('reward-banner').style.display = 'none';
+            renderWallet();
+            alert('Wallet reset successfully!');
+        }
+
+        renderWallet();
+    </script>
+</body>
+</html>
