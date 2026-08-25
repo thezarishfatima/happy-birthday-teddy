@@ -21,7 +21,19 @@
             border-radius: 24px;
             box-shadow: 0 12px 30px rgba(0,0,0,0.18);
             border: 4px solid #ffd1dc;
+            position: relative;
         }
+
+        /* Decorative Floating Badges */
+        .decoration-badge {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            user-select: none;
+        }
+        .badge-top-left { top: 15px; left: 20px; }
+        .badge-top-right { top: 15px; right: 20px; }
+
         h1 { 
             color: #ff4757; 
             margin-bottom: 5px; 
@@ -30,9 +42,9 @@
         }
         .subtitle {
             color: #777;
-            font-size: 15px;
+            font-size: 14px;
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .back-link {
             display: inline-block;
@@ -48,12 +60,38 @@
         }
         .back-link:hover { transform: scale(1.04); }
 
+        /* Progress Tracker Bar */
+        .progress-box {
+            background: #fff0f3;
+            border: 1px solid #ffccd5;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin: 15px auto 20px auto;
+            max-width: 380px;
+            font-size: 13px;
+            color: #ad1457;
+            font-weight: bold;
+        }
+        .progress-bar-bg {
+            background: #ffd1dc;
+            height: 10px;
+            border-radius: 10px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background: #ff4757;
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
         /* Drop Zone / Slot Box */
         .slot-container {
-            margin: 20px auto;
+            margin: 15px auto;
             width: 100%;
             max-width: 400px;
-            height: 190px;
+            height: 180px;
             border: 3px dashed #ff6b81;
             border-radius: 20px;
             background: #fff8f9;
@@ -83,86 +121,8 @@
         .slot-text { 
             font-weight: bold; 
             color: #ff4757; 
-            font-size: 1.05rem; 
+            font-size: 1rem; 
             letter-spacing: 0.5px;
-        }
-
-        /* Wallet Inventory Area */
-        .wallet-section {
-            margin-top: 25px;
-            background: #fff0f3;
-            border: 2px solid #ffccd5;
-            padding: 22px 15px;
-            border-radius: 20px;
-        }
-        .wallet-title {
-            margin: 0;
-            color: #d81b60;
-            font-size: 1.2rem;
-        }
-        .ticket-list {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 18px;
-            min-height: 120px;
-        }
-
-        /* Image-Based Draggable Ticket Card (Uncropped Fit) */
-        .draggable-ticket {
-            width: 160px;
-            height: 100px;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 2px solid #f48fb1;
-            cursor: grab;
-            user-select: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px;
-            box-sizing: border-box;
-        }
-        .draggable-ticket img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain; /* Prevents cropping on ticket edges */
-            display: block;
-            pointer-events: none;
-        }
-        .draggable-ticket:hover {
-            transform: translateY(-4px) rotate(1deg);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-        }
-        .draggable-ticket:active { cursor: grabbing; transform: scale(0.95); }
-
-        /* Redeemed State Overlay */
-        .draggable-ticket.redeemed {
-            opacity: 0.45;
-            cursor: not-allowed;
-            border-color: #ccc;
-            transform: none !important;
-            box-shadow: none;
-        }
-        .draggable-ticket.redeemed::after {
-            content: '✨ CLAIMED ✨';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(80, 80, 80, 0.45);
-            color: white;
-            font-weight: bold;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            letter-spacing: 1px;
         }
 
         /* Cute Redesigned Voucher Reward Card */
@@ -195,6 +155,106 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
+        /* Wallet Inventory Area */
+        .wallet-section {
+            margin-top: 25px;
+            background: #fff0f3;
+            border: 2px solid #ffccd5;
+            padding: 22px 15px;
+            border-radius: 20px;
+        }
+        .wallet-title {
+            margin: 0;
+            color: #d81b60;
+            font-size: 1.2rem;
+        }
+        .ticket-list {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 18px;
+            min-height: 110px;
+        }
+
+        /* Draggable Ticket Card (Uncropped Fit) */
+        .draggable-ticket {
+            width: 160px;
+            height: 100px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid #f48fb1;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+        .draggable-ticket img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+        }
+        .draggable-ticket:hover {
+            transform: translateY(-4px) rotate(1deg);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+        .draggable-ticket:active { cursor: grabbing; transform: scale(0.95); }
+
+        /* Redeemed State Overlay */
+        .draggable-ticket.redeemed {
+            opacity: 0.45;
+            cursor: not-allowed;
+            border-color: #ccc;
+            transform: none !important;
+            box-shadow: none;
+        }
+        .draggable-ticket.redeemed::after {
+            content: '✨ CLAIMED ✨';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(80, 80, 80, 0.45);
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 1px;
+        }
+
+        /* Redemption Activity Log */
+        .activity-log {
+            margin-top: 20px;
+            text-align: left;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            padding: 12px 18px;
+            font-size: 13px;
+            color: #666;
+        }
+        .activity-log h4 {
+            margin: 0 0 8px 0;
+            color: #d81b60;
+            font-size: 13px;
+        }
+        .activity-log ul {
+            margin: 0;
+            padding-left: 18px;
+            line-height: 1.6;
+        }
+
         /* Reset Button */
         .reset-btn {
             margin-top: 25px;
@@ -213,10 +273,21 @@
 <body>
 
     <div class="container">
+        <span class="decoration-badge badge-top-left">🎀</span>
+        <span class="decoration-badge badge-top-right">✨</span>
+
         <a href="message.html" class="back-link">⬅️ Back to Birthday Page</a>
 
         <h1>🎟️ Ticket Redemption Slot 🌸</h1>
-        <p class="subtitle">Drag a tikit from your wallet inventory and drop it right into the slot!</p>
+        <p class="subtitle">Drag a tikit from your wallet inventory and drop it into the slot!</p>
+
+        <!-- Redemption Progress Meter -->
+        <div class="progress-box">
+            Redemption Status: <span id="progress-text">0 / 0 Redeemed</span>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+        </div>
 
         <!-- Drop Slot Container -->
         <div class="slot-container" id="drop-slot" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
@@ -224,11 +295,12 @@
             <div class="slot-text">DROP TIKIT HERE TO REDEEM ✨</div>
         </div>
 
-        <!-- Cute Reward Voucher Banner -->
+        <!-- Dynamic Reward Voucher Banner -->
         <div id="reward-banner" class="reward-card">
             <span class="reward-badge">OFFICIAL VOUCHER UNLOCKED</span>
-            <h3 id="reward-title" style="margin:4px 0 8px 0; color:#d81b60; font-size:1.15rem;">🎉 YAY! Tikit Redeemed!</h3>
-            <p id="reward-desc" style="margin:0; font-size:15px; line-height:1.5; font-weight: 500;"></p>
+            <!-- Custom heading updated per ticket -->
+            <h3 id="reward-title" style="margin:4px 0 8px 0; color:#d81b60; font-size:1.1rem;"></h3>
+            <p id="reward-desc" style="margin:0; font-size:14.5px; line-height:1.5; font-weight: 500;"></p>
         </div>
 
         <!-- Wallet Inventory -->
@@ -239,14 +311,36 @@
             </div>
         </div>
 
+        <!-- Activity History Log -->
+        <div class="activity-log" id="activity-log-box" style="display:none;">
+            <h4>📋 Claimed Voucher History:</h4>
+            <ul id="log-list"></ul>
+        </div>
+
         <button class="reset-btn" onclick="clearWallet()">Reset Wallet Data 🔄</button>
     </div>
 
     <script>
+        // Custom headings and rewards for each specific ticket ID
         const ticketData = {
-            't1': { img: 'ticket1.jpg', name: 'Tikit #001', reward: '🌸 Unlimited Hugs & Lifetime Friendship Pass Activated!' },
-            't2': { img: 'ticket2.jpg', name: 'Tikit #002', reward: '📞 Reserved Late Night Vent Session & Late Night Calls Unlocked!' },
-            't3': { img: 'ticket3.jpg', name: 'Tikit #003', reward: '🎁 Golden Ticket: One Free Wish Granted by Bunnie!' }
+            't1': { 
+                img: 'ticket1.jpg', 
+                name: 'Tikit #001', 
+                heading: '..YAYYYYYYYY TIKIT #001 REDEEMED SUCCESSFULLY...!! 🎉',
+                reward: '🌸 Unlimited Hugs & Lifetime Friendship Pass Activated!' 
+            },
+            't2': { 
+                img: 'ticket2.jpg', 
+                name: 'Tikit #002', 
+                heading: '..WOOOOO TIKIT #002 REDEEMED SUCCESSFULLY...!! 📞',
+                reward: '✨ Reserved Late Night Vent Session & Late Night Calls Unlocked!' 
+            },
+            't3': { 
+                img: 'ticket3.jpg', 
+                name: 'Tikit #003', 
+                heading: '..SUPER DUPER SPECIAL TIKIT #003 REDEEMED...!! 🎁',
+                reward: '👑 Golden Ticket: One Free Wish Granted by Bunnie!' 
+            }
         };
 
         function renderWallet() {
@@ -255,6 +349,31 @@
             
             let collected = JSON.parse(localStorage.getItem('myTickets') || '[]');
             let redeemed = JSON.parse(localStorage.getItem('redeemedTickets') || '[]');
+
+            // Update Progress Bar
+            const totalCollected = collected.length;
+            const totalRedeemed = redeemed.length;
+            document.getElementById('progress-text').innerText = `${totalRedeemed} / ${totalCollected} Tikits Redeemed`;
+            const fillPct = totalCollected > 0 ? (totalRedeemed / totalCollected) * 100 : 0;
+            document.getElementById('progress-fill').style.width = fillPct + '%';
+
+            // Update Activity Log
+            const logBox = document.getElementById('activity-log-box');
+            const logList = document.getElementById('log-list');
+            logList.innerHTML = '';
+            
+            if (redeemed.length > 0) {
+                logBox.style.display = 'block';
+                redeemed.forEach(id => {
+                    if (ticketData[id]) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>${ticketData[id].name}:</strong> ${ticketData[id].reward}`;
+                        logList.appendChild(li);
+                    }
+                });
+            } else {
+                logBox.style.display = 'none';
+            }
 
             if (collected.length === 0) {
                 inventory.innerHTML = '<p style="color:#b56576; font-size: 14px;">No tikits in your wallet yet! Go unbox them on the message page first! 🎁</p>';
@@ -306,7 +425,9 @@
                 redeemed.push(id);
                 localStorage.setItem('redeemedTickets', JSON.stringify(redeemed));
 
+                // Set dynamic custom heading & description for this ticket
                 const banner = document.getElementById('reward-banner');
+                document.getElementById('reward-title').innerText = ticketData[id].heading;
                 document.getElementById('reward-desc').innerText = ticketData[id].reward;
                 banner.style.display = 'block';
 
