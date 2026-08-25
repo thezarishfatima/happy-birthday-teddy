@@ -14,7 +14,7 @@
             margin: 0;
         }
         .container { 
-            max-width: 600px; 
+            max-width: 650px; 
             margin: 0 auto; 
             background: white; 
             color: #333; 
@@ -23,45 +23,87 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
             position: relative;
         }
-        h1 { color: #ff4757; }
+        h1 { color: #ff4757; margin-bottom: 5px; }
         p { line-height: 1.6; font-size: 17px; }
 
-        /* Gallery Grid */
+        /* Wallet Nav Button */
+        .wallet-nav {
+            display: inline-block;
+            background: #fff0f3;
+            color: #d81b60;
+            border: 2px dashed #f48fb1;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 15px;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .wallet-nav:hover { transform: scale(1.05); background: #fce4ec; }
+
+        /* How-To-Play Instruction Box */
+        .instructions {
+            background: #fff5f5;
+            border-left: 4px solid #ff4757;
+            color: #555;
+            text-align: left;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin: 15px 0 25px 0;
+            line-height: 1.5;
+        }
+        .instructions strong { color: #ff4757; }
+
+        /* Vertical Gallery Stack matching Ticket Shapes */
         .gallery { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
-            gap: 15px; 
+            display: flex;
+            flex-direction: column;
+            gap: 25px; 
             margin: 25px 0; 
+            align-items: center;
+        }
+
+        .ticket-card-outer {
+            width: 100%;
+            max-width: 440px;
         }
 
         /* Gift Box Wrapper */
         .gift-card {
             position: relative;
-            height: 150px;
-            border-radius: 12px;
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
             cursor: pointer;
             perspective: 600px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        /* Revealed Image Underneath */
-        .gift-card img { 
+        /* Ticket JPG Container */
+        .ticket-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ticket-wrapper img { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            border-radius: 12px; 
-            border: 3px solid #ff7880; 
-            box-sizing: border-box;
+            border-radius: 16px;
             display: block;
         }
 
-        /* Gift Wrap Overlay Layer */
+        /* Pastel Wrap Lids */
         .gift-box {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 12px;
+            border-radius: 16px;
             z-index: 2;
             display: flex;
             align-items: center;
@@ -70,36 +112,43 @@
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
         }
 
-        /* Pastel Wrap Color Variations */
-        .gift-card:nth-child(1) .gift-box { background: #ffb7b2; }
-        .gift-card:nth-child(2) .gift-box { background: #b5ead7; }
-        .gift-card:nth-child(3) .gift-box { background: #c7ceea; }
-
-        /* Ribbon Base */
-        .gift-box::before {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-        }
+        .gift-card:nth-child(1) .gift-box { background: #ffe0b2; }
+        .gift-card:nth-child(2) .gift-box { background: #bbdefb; }
+        .gift-card:nth-child(3) .gift-box { background: #e1bee7; }
 
         .gift-box::after {
-            content: '🎁';
-            font-size: 2.2rem;
+            content: '🎁 Tap to Unbox Ticket';
+            font-weight: bold;
+            color: #444;
+            font-size: 1.05rem;
             z-index: 3;
-            transition: transform 0.2s ease;
         }
 
-        .gift-card:hover .gift-box::after {
-            transform: scale(1.15) rotate(-5deg);
-        }
-
-        /* Lid Bounce & Fall Animation on Click */
         .gift-card.opened .gift-box {
-            transform: translateY(180px) rotate(25deg) scale(0.8);
+            transform: translateY(220px) rotate(15deg);
             opacity: 0;
             pointer-events: none;
+        }
+
+        /* Collect Button Below Each Box */
+        .collect-btn {
+            display: none;
+            margin-top: 10px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(255, 71, 87, 0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .collect-btn:hover { transform: scale(1.05); }
+        .collect-btn:disabled {
+            background: #81c784;
+            box-shadow: none;
+            cursor: default;
         }
 
         /* Confetti Canvas */
@@ -119,25 +168,56 @@
     <canvas id="confetti-canvas"></canvas>
 
     <div class="container">
+        <!-- Top Navigation to Inventory -->
+        <a href="redeem.html" class="wallet-nav">🎟️ Inventory Wallet (<span id="ticket-count">0</span>/3)</a>
+
         <h1>🎉 ..EPIEST BIRTHDAY ABHI...!! 🎉</h1>
         <p>..arey waaaoow ap ny to sari puzzles solve crli, itty saarp ho apto...</p>
 
+        <!-- Instructions Section -->
+        <div class="instructions">
+            ✨ <strong>How to claim your gifts:</strong><br>
+            1. Tap the gift boxes below to unbox your mystery tikits!<br>
+            2. Click <strong>"Collect to Wallet"</strong> under each revealed tikit.<br>
+            3. Head over to your <strong>Inventory Wallet</strong> to redeem your secret surprises! 🌸
+        </div>
+
         <div class="gallery">
-            <div class="gift-card" onclick="openGift(this)">
-                <div class="gift-box"></div>
-                <img src="baby1.jpg" alt="Baby Picture 1">
+            <!-- Box 1 -->
+            <div class="ticket-card-outer">
+                <div class="gift-card" onclick="openGift(this, 't1')">
+                    <div class="gift-box"></div>
+                    <div class="ticket-wrapper">
+                        <img src="ticket1.jpg" alt="Tikit #001">
+                    </div>
+                </div>
+                <button id="btn-t1" class="collect-btn" onclick="collectTicket('t1', 'Tikit #001')">Collect to Wallet 🎟️</button>
             </div>
-            <div class="gift-card" onclick="openGift(this)">
-                <div class="gift-box"></div>
-                <img src="baby2.jpg" alt="Baby Picture 2">
+
+            <!-- Box 2 -->
+            <div class="ticket-card-outer">
+                <div class="gift-card" onclick="openGift(this, 't2')">
+                    <div class="gift-box"></div>
+                    <div class="ticket-wrapper">
+                        <img src="ticket2.jpg" alt="Tikit #002">
+                    </div>
+                </div>
+                <button id="btn-t2" class="collect-btn" onclick="collectTicket('t2', 'Tikit #002')">Collect to Wallet 🎟️</button>
             </div>
-            <div class="gift-card" onclick="openGift(this)">
-                <div class="gift-box"></div>
-                <img src="baby3.jpg" alt="Baby Picture 3">
+
+            <!-- Box 3 -->
+            <div class="ticket-card-outer">
+                <div class="gift-card" onclick="openGift(this, 't3')">
+                    <div class="gift-box"></div>
+                    <div class="ticket-wrapper">
+                        <img src="ticket3.jpg" alt="Tikit #003">
+                    </div>
+                </div>
+                <button id="btn-t3" class="collect-btn" onclick="collectTicket('t3', 'Tikit #003')">Collect to Wallet 🎟️</button>
             </div>
         </div>
 
-        <hr style="border: 0; height: 1px; background: #eee; margin: 20px 0;">
+        <hr style="border: 0; height: 1px; background: #eee; margin: 25px 0;">
 
         <h2>..A LITTLE MESSAGE FOR YOU...~</h2>
         <p>
@@ -146,6 +226,43 @@
     </div>
 
     <script>
+        // Inventory Counter & Button Persistence
+        function updateCount() {
+            let collected = JSON.parse(localStorage.getItem('myTickets') || '[]');
+            document.getElementById('ticket-count').innerText = collected.length;
+            collected.forEach(id => {
+                let btn = document.getElementById('btn-' + id);
+                if(btn) {
+                    btn.style.display = 'inline-block';
+                    btn.innerText = 'Collected to Wallet! ✨';
+                    btn.disabled = true;
+                }
+            });
+        }
+
+        function openGift(card, id) {
+            if (!card.classList.contains('opened')) {
+                card.classList.add('opened');
+                const btn = document.getElementById('btn-' + id);
+                if(btn && !btn.disabled) {
+                    btn.style.display = 'inline-block';
+                }
+                const rect = card.getBoundingClientRect();
+                createConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            }
+        }
+
+        function collectTicket(id, name) {
+            let collected = JSON.parse(localStorage.getItem('myTickets') || '[]');
+            if (!collected.includes(id)) {
+                collected.push(id);
+                localStorage.setItem('myTickets', JSON.stringify(collected));
+                updateCount();
+                alert(name + ' added to your inventory wallet!');
+            }
+        }
+
+        // Confetti Particle Engine
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -158,11 +275,10 @@
         resizeCanvas();
 
         function createConfetti(x, y) {
-            const colors = ['#ff7880', '#ffb7b2', '#b5ead7', '#c7ceea', '#e2f0cb', '#ff9aa2'];
+            const colors = ['#ff7880', '#ffe0b2', '#bbdefb', '#e1bee7', '#ffb7b2', '#b5ead7'];
             for (let i = 0; i < 35; i++) {
                 particles.push({
-                    x: x,
-                    y: y,
+                    x: x, y: y,
                     vx: (Math.random() - 0.5) * 10,
                     vy: (Math.random() - 0.7) * 12,
                     size: Math.random() * 8 + 4,
@@ -176,31 +292,17 @@
         function updateConfetti() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach((p, index) => {
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vy += 0.3; // Gravity
-                p.life -= p.decay;
-
+                p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.life -= p.decay;
                 ctx.fillStyle = p.color;
                 ctx.globalAlpha = Math.max(p.life, 0);
                 ctx.fillRect(p.x, p.y, p.size, p.size);
-
                 if (p.life <= 0) particles.splice(index, 1);
             });
             ctx.globalAlpha = 1;
             requestAnimationFrame(updateConfetti);
         }
         updateConfetti();
-
-        function openGift(card) {
-            if (!card.classList.contains('opened')) {
-                card.classList.add('opened');
-                const rect = card.getBoundingClientRect();
-                const x = rect.left + rect.width / 2;
-                const y = rect.top + rect.height / 2;
-                createConfetti(x, y);
-            }
-        }
+        updateCount();
     </script>
 </body>
 </html>
