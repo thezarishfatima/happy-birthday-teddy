@@ -86,6 +86,12 @@
             position: relative;
             width: 100%;
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff0f3;
+            border-radius: 16px;
+            overflow: hidden;
         }
 
         .ticket-wrapper img { 
@@ -95,6 +101,23 @@
             border-radius: 16px;
             display: block;
         }
+
+        /* Fallback Ticket UI (Shows if image link is pending) */
+        .ticket-fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            border: 3px dashed #ff4757;
+            border-radius: 16px;
+            box-sizing: border-box;
+            background: #fff5f6;
+            color: #d81b60;
+        }
+        .ticket-fallback h3 { margin: 0; font-size: 1.4rem; color: #ff4757; }
+        .ticket-fallback p { margin: 5px 0 0 0; font-size: 0.95rem; font-weight: 600; color: #777; }
 
         /* Color Matched Wrap Lids */
         .gift-box {
@@ -113,13 +136,13 @@
         }
 
         /* Ticket 1: Peach/Orange */
-.ticket-card-outer:nth-child(1) .gift-box { background: #f8a176 !important; }
+        .ticket-card-outer:nth-child(1) .gift-box { background: #f8a176 !important; }
 
-/* Ticket 2: Soft Blue */
-.ticket-card-outer:nth-child(2) .gift-box { background: #a2d2ff !important; }
+        /* Ticket 2: Soft Blue */
+        .ticket-card-outer:nth-child(2) .gift-box { background: #a2d2ff !important; }
 
-/* Ticket 3: Pastel Purple */
-.ticket-card-outer:nth-child(3) .gift-box { background: #cdb4db !important; }
+        /* Ticket 3: Pastel Purple */
+        .ticket-card-outer:nth-child(3) .gift-box { background: #cdb4db !important; }
         
         .gift-box::after {
             content: '🎁 Tap to Unbox Ticket';
@@ -193,7 +216,7 @@
                 <div class="gift-card" onclick="openGift(this, 't1')">
                     <div class="gift-box"></div>
                     <div class="ticket-wrapper">
-                        <img src="./ticket1.jpg" alt="Tikit #001">
+                        <img src="ticket1.jpg" alt="Tikit #001" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'ticket-fallback\'><h3>🎟️ Tikit #001</h3><p>Special Birthday Voucher</p></div>';">
                     </div>
                 </div>
                 <button id="btn-t1" class="collect-btn" onclick="collectTicket('t1', 'Tikit #001')">Collect to Wallet 🎟️</button>
@@ -204,7 +227,7 @@
                 <div class="gift-card" onclick="openGift(this, 't2')">
                     <div class="gift-box"></div>
                     <div class="ticket-wrapper">
-                        <img src="./ticket2.jpg" alt="Tikit #002">
+                        <img src="ticket2.jpg" alt="Tikit #002" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'ticket-fallback\'><h3>🎟️ Tikit #002</h3><p>Special Birthday Voucher</p></div>';">
                     </div>
                 </div>
                 <button id="btn-t2" class="collect-btn" onclick="collectTicket('t2', 'Tikit #002')">Collect to Wallet 🎟️</button>
@@ -215,7 +238,7 @@
                 <div class="gift-card" onclick="openGift(this, 't3')">
                     <div class="gift-box"></div>
                     <div class="ticket-wrapper">
-                        <img src="./ticket3.jpg" alt="Tikit #003">
+                        <img src="ticket3.jpg" alt="Tikit #003" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'ticket-fallback\'><h3>🎟️ Tikit #003</h3><p>Special Birthday Voucher</p></div>';">
                     </div>
                 </div>
                 <button id="btn-t3" class="collect-btn" onclick="collectTicket('t3', 'Tikit #003')">Collect to Wallet 🎟️</button>
