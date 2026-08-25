@@ -55,7 +55,7 @@
         }
         .instructions strong { color: #ff4757; }
 
-        /* Vertical Gallery Stack matching Ticket Shapes */
+        /* Gallery Stack */
         .gallery { 
             display: flex;
             flex-direction: column;
@@ -81,7 +81,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        /* Ticket JPG Container */
+        /* Ticket Image Container */
         .ticket-wrapper {
             position: relative;
             width: 100%;
@@ -96,7 +96,7 @@
             display: block;
         }
 
-        /* Pastel Wrap Lids */
+        /* Color Matched Wrap Lids */
         .gift-box {
             position: absolute;
             top: 0;
@@ -112,16 +112,21 @@
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
         }
 
-        .gift-card:nth-child(1) .gift-box { background: #ffe0b2; }
-        .gift-card:nth-child(2) .gift-box { background: #bbdefb; }
-        .gift-card:nth-child(3) .gift-box { background: #e1bee7; }
+        /* Ticket 1: Orange/Peach Bear */
+        .gift-card:nth-child(1) .gift-box { background: #f8a176; color: #ffffff; }
+        
+        /* Ticket 2: Soft Blue Bunny */
+        .gift-card:nth-child(2) .gift-box { background: #a2d2ff; color: #ffffff; }
+        
+        /* Ticket 3: Purple Duo */
+        .gift-card:nth-child(3) .gift-box { background: #cdb4db; color: #ffffff; }
 
         .gift-box::after {
             content: '🎁 Tap to Unbox Ticket';
             font-weight: bold;
-            color: #444;
             font-size: 1.05rem;
             z-index: 3;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
         }
 
         .gift-card.opened .gift-box {
@@ -183,7 +188,7 @@
         </div>
 
         <div class="gallery">
-            <!-- Box 1 -->
+            <!-- Box 1 (Orange/Peach) -->
             <div class="ticket-card-outer">
                 <div class="gift-card" onclick="openGift(this, 't1')">
                     <div class="gift-box"></div>
@@ -194,7 +199,7 @@
                 <button id="btn-t1" class="collect-btn" onclick="collectTicket('t1', 'Tikit #001')">Collect to Wallet 🎟️</button>
             </div>
 
-            <!-- Box 2 -->
+            <!-- Box 2 (Blue) -->
             <div class="ticket-card-outer">
                 <div class="gift-card" onclick="openGift(this, 't2')">
                     <div class="gift-box"></div>
@@ -205,7 +210,7 @@
                 <button id="btn-t2" class="collect-btn" onclick="collectTicket('t2', 'Tikit #002')">Collect to Wallet 🎟️</button>
             </div>
 
-            <!-- Box 3 -->
+            <!-- Box 3 (Purple) -->
             <div class="ticket-card-outer">
                 <div class="gift-card" onclick="openGift(this, 't3')">
                     <div class="gift-box"></div>
@@ -226,7 +231,6 @@
     </div>
 
     <script>
-        // Inventory Counter & Button Persistence
         function updateCount() {
             let collected = JSON.parse(localStorage.getItem('myTickets') || '[]');
             document.getElementById('ticket-count').innerText = collected.length;
@@ -262,7 +266,6 @@
             }
         }
 
-        // Confetti Particle Engine
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -275,7 +278,7 @@
         resizeCanvas();
 
         function createConfetti(x, y) {
-            const colors = ['#ff7880', '#ffe0b2', '#bbdefb', '#e1bee7', '#ffb7b2', '#b5ead7'];
+            const colors = ['#f8a176', '#a2d2ff', '#cdb4db', '#ffb7b2', '#b5ead7'];
             for (let i = 0; i < 35; i++) {
                 particles.push({
                     x: x, y: y,
