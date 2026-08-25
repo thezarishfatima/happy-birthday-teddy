@@ -35,10 +35,10 @@
 
         /* Drop Zone / Slot Box */
         .slot-container {
-            margin: 30px auto;
+            margin: 25px auto;
             width: 100%;
             max-width: 380px;
-            height: 220px;
+            height: 200px;
             border: 3px dashed #ff4757;
             border-radius: 20px;
             background: #fff5f6;
@@ -48,62 +48,83 @@
             justify-content: center;
             transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
         .slot-container.drag-over {
             background: #ffe3e6;
             border-color: #d81b60;
             transform: scale(1.02);
         }
-        .slot-icon { font-size: 3rem; margin-bottom: 10px; }
-        .slot-text { font-weight: bold; color: #ff4757; font-size: 1.1rem; }
+        .slot-icon { font-size: 2.5rem; margin-bottom: 5px; }
+        .slot-text { font-weight: bold; color: #ff4757; font-size: 1rem; }
 
         /* Wallet Inventory Area */
         .wallet-section {
-            margin-top: 30px;
-            background: #fdf2f4;
+            margin-top: 25px;
+            background: #fff0f3;
             padding: 20px;
             border-radius: 16px;
         }
         .ticket-list {
             display: flex;
-            flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
+            flex-wrap: wrap;
             margin-top: 15px;
-            min-height: 100px;
+            min-height: 120px;
         }
 
-        /* Draggable Ticket Card */
+        /* Image-Based Draggable Ticket Card */
         .draggable-ticket {
-            background: white;
+            width: 150px;
+            height: 100px;
+            border-radius: 14px;
+            overflow: hidden;
             border: 2px solid #f48fb1;
-            border-radius: 12px;
-            padding: 12px 18px;
             cursor: grab;
             user-select: none;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             transition: transform 0.2s, box-shadow 0.2s;
-            font-weight: bold;
-            color: #d81b60;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            position: relative;
+            background: #fff;
+        }
+        .draggable-ticket img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none; /* Prevents default browser image drag behavior */
+        }
+        .draggable-ticket:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
         }
         .draggable-ticket:active { cursor: grabbing; transform: scale(0.95); }
+
+        /* Redeemed Overlay */
         .draggable-ticket.redeemed {
             opacity: 0.5;
             cursor: not-allowed;
-            text-decoration: line-through;
             border-color: #ccc;
-            background: #eee;
-            color: #888;
+        }
+        .draggable-ticket.redeemed::after {
+            content: '✅ REDEEMED';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Unlocked Voucher Announcement Modal */
         .reward-card {
             display: none;
             margin-top: 20px;
-            padding: 20px;
+            padding: 18px;
             background: #e8f5e9;
             border: 2px solid #81c784;
             border-radius: 15px;
@@ -134,7 +155,7 @@
         <a href="message.html" class="back-link">⬅️ Back to Birthday Page</a>
 
         <h1>🎟️ Ticket Redemption Slot</h1>
-        <p>Drag a ticket from your wallet and drop it into the slot below to redeem!</p>
+        <p>Drag a ticket image from your wallet and drop it into the slot!</p>
 
         <!-- The Drop Slot -->
         <div class="slot-container" id="drop-slot" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
@@ -150,7 +171,7 @@
 
         <!-- Wallet Inventory -->
         <div class="wallet-section">
-            <h3>💼 Your Wallet Inventory</h3>
+            <h3 style="margin:0;">💼 Your Wallet Inventory</h3>
             <div class="ticket-list" id="ticket-inventory">
                 <!-- Dynamically populated -->
             </div>
@@ -161,9 +182,9 @@
 
     <script>
         const ticketData = {
-            't1': { name: 'Tikit #001', reward: '✨ Voucher Unlocked: Unlimited Hugs & Lifetime Friendship Pass! 🌸' },
-            't2': { name: 'Tikit #002', reward: '✨ Voucher Unlocked: Late Night Vent Session & Late Night Calls! 📞' },
-            't3': { name: 'Tikit #003', reward: '✨ Voucher Unlocked: One Free Wish Granted by Bunnie! 🎁' }
+            't1': { img: 'ticket1.jpg', name: 'Tikit #001', reward: '✨ Voucher Unlocked: Unlimited Hugs & Lifetime Friendship Pass! 🌸' },
+            't2': { img: 'ticket2.jpg', name: 'Tikit #002', reward: '✨ Voucher Unlocked: Late Night Vent Session & Late Night Calls! 📞' },
+            't3': { img: 'ticket3.jpg', name: 'Tikit #003', reward: '✨ Voucher Unlocked: One Free Wish Granted by Bunnie! 🎁' }
         };
 
         function renderWallet() {
@@ -182,8 +203,12 @@
                 const isRedeemed = redeemed.includes(id);
                 const item = document.createElement('div');
                 item.className = 'draggable-ticket' + (isRedeemed ? ' redeemed' : '');
-                item.innerText = (isRedeemed ? '✅ ' : '🎟️ ') + ticketData[id].name;
                 
+                const img = document.createElement('img');
+                img.src = ticketData[id].img;
+                img.alt = ticketData[id].name;
+                item.appendChild(img);
+
                 if (!isRedeemed) {
                     item.draggable = true;
                     item.ondragstart = (e) => e.dataTransfer.setData('text/plain', id);
